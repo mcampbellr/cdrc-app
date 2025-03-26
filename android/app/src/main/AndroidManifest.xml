@@ -26,6 +26,7 @@
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="cdrc"/>
         <data android:scheme="com.mcampbellr.cdrcapp"/>
+        <data android:scheme="exp+cdrc-app"/>
       </intent-filter>
     </activity>
   </application>

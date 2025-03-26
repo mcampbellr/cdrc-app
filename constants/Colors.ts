@@ -11,6 +11,8 @@ export interface ColorsTheme {
   icon: string;
   tabIconDefault: string;
   tabIconSelected: string;
+  buttonBackground: string;
+  buttonText: string;
 }
 
 export const Colors: Record<string, ColorsTheme> = {
@@ -22,6 +24,8 @@ export const Colors: Record<string, ColorsTheme> = {
     icon: "#687076",
     tabIconDefault: "#687076",
     tabIconSelected: tintColorLight,
+    buttonBackground: primaryColor,
+    buttonText: "#fff",
   },
   dark: {
     primary: primaryColor,
@@ -31,6 +35,8 @@ export const Colors: Record<string, ColorsTheme> = {
     icon: "#9BA1A6",
     tabIconDefault: "#9BA1A6",
     tabIconSelected: tintColorDark,
+    buttonBackground: "white",
+    buttonText: primaryColor,
   },
 };
 

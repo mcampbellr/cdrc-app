@@ -1,19 +1,14 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  ImageBackground,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 import * as WebBrowser from "expo-web-browser";
 
 import * as Google from "expo-auth-session/providers/google";
+
 import { useEffect, useState } from "react";
 import { signInWithGoogle } from "@/api/auth.api";
+import { Prompt, ResponseType } from "expo-auth-session";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -32,62 +27,16 @@ interface User {
   };
 }
 
-export const TreatmentCard = () => {
-  return (
-    <ImageBackground
-      style={{
-        width: "100%",
-        height: 125,
-        backgroundColor: "red",
-        borderRadius: 20,
-        justifyContent: "space-between",
-        padding: 15,
-      }}
-      source={{ uri: "https://imgur.com/KJVH6n5" }}
-    >
-      <View>
-        <Text
-          style={{
-            fontSize: 30,
-            fontWeight: "bold",
-            color: "white",
-          }}
-        >
-          Toxina Botulinica
-        </Text>
-        <Text
-          style={{
-            color: "white",
-            fontSize: 15,
-            marginTop: 3,
-          }}
-        >
-          Sucursal Escazu
-        </Text>
-      </View>
-      <View>
-        <Text
-          style={{
-            color: "white",
-            fontSize: 20,
-          }}
-        >
-          19 Marzo 2025, 10:00 AM
-        </Text>
-      </View>
-    </ImageBackground>
-  );
-};
-
 export default function Login() {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
   const [, response, promptAsync] = Google.useIdTokenAuthRequest({
-    iosClientId:
-      "993313171487-i2krjp9jud41f2gaskthevpiiqb0q62t.apps.googleusercontent.com",
-    androidClientId:
-      "993313171487-17oksbvitk3uiaim546lhpb5c5ig1739.apps.googleusercontent.com",
+    iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID || "",
+    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID || "",
+    scopes: ["openid", "profile", "email"],
+    prompt: Prompt.SelectAccount,
+    responseType: ResponseType.IdToken,
   });
 
   const handlePressAsync = async () => {
@@ -116,6 +65,8 @@ export default function Login() {
     if (!token) return;
     try {
       const result = await signInWithGoogle(token);
+
+      console.log({ result });
 
       setUser(result);
     } catch (error) {
@@ -166,17 +117,6 @@ export default function Login() {
               )}
             </TouchableOpacity>
           )}
-        </View>
-
-        <View
-          style={{
-            gap: 15,
-          }}
-        >
-          <TreatmentCard></TreatmentCard>
-          <TreatmentCard></TreatmentCard>
-          <TreatmentCard></TreatmentCard>
-          <TreatmentCard></TreatmentCard>
         </View>
       </SafeAreaView>
     </View>

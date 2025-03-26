@@ -1,4 +1,6 @@
+import ThemedButton from "@/components/ThemedButton";
 import { ThemedText } from "@/components/ThemedText";
+import { useThemeColors } from "@/hooks/useThemeColors";
 import { router } from "expo-router";
 import React, { FC, ReactNode, useRef } from "react";
 import {
@@ -10,6 +12,8 @@ import {
   Text,
   TouchableOpacity,
   TouchableOpacityProps,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
 } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -44,6 +48,7 @@ export default function Onboarding() {
   const scrollX = useRef(new Animated.Value(0)).current;
   const flatListRef = useRef<Animated.FlatList<any>>(null);
   const [currentIndex, setCurrentIndex] = React.useState(0);
+  const { colors } = useThemeColors();
 
   return (
     <GestureHandlerRootView>
@@ -56,13 +61,16 @@ export default function Onboarding() {
           pagingEnabled
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-            { useNativeDriver: false },
+            {
+              useNativeDriver: false,
+              listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+                const x = event.nativeEvent.contentOffset.x + 0.01;
+                const index = Math.round(x / width);
+
+                setCurrentIndex(index);
+              },
+            },
           )}
-          onMomentumScrollEnd={(event) => {
-            const contentOffsetX = event.nativeEvent.contentOffset.x;
-            const index = Math.floor(contentOffsetX / width);
-            setCurrentIndex(index);
-          }}
           keyExtractor={({ number }) => number.toString()}
           renderItem={({ item }) => {
             return (
@@ -109,7 +117,7 @@ export default function Onboarding() {
                   styles.indicator,
                   {
                     width: widthAnimated,
-                    backgroundColor: "white",
+                    backgroundColor: colors.text,
                   },
                 ]}
               />
@@ -120,7 +128,7 @@ export default function Onboarding() {
         {/* Button container */}
         <View style={styles.buttonContainer}>
           {currentIndex === 0 && (
-            <ThemeButton
+            <ThemedButton
               onPress={() => {
                 flatListRef.current?.scrollToIndex({
                   index: data.length - 1,
@@ -128,11 +136,11 @@ export default function Onboarding() {
                 });
               }}
             >
-              Skip
-            </ThemeButton>
+              Saltar
+            </ThemedButton>
           )}
 
-          <ThemeButton
+          <ThemedButton
             onPress={() => {
               if (currentIndex === data.length - 1) {
                 router.replace("/login");
@@ -145,59 +153,28 @@ export default function Onboarding() {
               });
             }}
           >
-            {currentIndex === data.length - 1 ? "Get Started" : "Next"}
-          </ThemeButton>
+            {currentIndex === data.length - 1 ? "Empecemos" : "Siguiente"}
+          </ThemedButton>
         </View>
       </SafeAreaView>
     </GestureHandlerRootView>
   );
 }
 
-interface ThemeButtonProps extends TouchableOpacityProps {
-  children: ReactNode;
-}
-
-const ThemeButton: FC<ThemeButtonProps> = ({ children, onPress }) => {
-  return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={{
-        backgroundColor: "white",
-        flex: 1,
-        paddingHorizontal: 30,
-        paddingVertical: 15,
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 10,
-        marginTop: 20,
-        minHeight: 45,
-      }}
-    >
-      <Text
-        style={{
-          textAlign: "center",
-          fontSize: 16,
-          fontWeight: "bold",
-        }}
-      >
-        {children}
-      </Text>
-    </TouchableOpacity>
-  );
-};
-
 const styles = StyleSheet.create({
   indicatorContainer: {
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 30,
-    marginTop: 20,
+    marginTop: 15,
     gap: 10,
   },
+
   indicator: {
     height: 5,
     borderRadius: 5,
   },
+
   itemContainer: {
     justifyContent: "center",
     alignItems: "center",
@@ -206,6 +183,7 @@ const styles = StyleSheet.create({
 
   buttonContainer: {
     gap: 10,
+    marginTop: 10,
     paddingHorizontal: 30,
     flexDirection: "row",
   },
