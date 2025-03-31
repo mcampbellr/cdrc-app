@@ -1,7 +1,15 @@
+import { User } from "@/constants/users.interface";
 import { v1client } from "./client.api";
 
-export const signInWithGoogle = async (idToken: string) => {
-  const result = await v1client.post("/auth/google", {
+interface SignInWithGoogleResponse {
+  user?: User;
+  accessToken?: string;
+  preAuthToken?: string;
+  requiresTwoFactor?: boolean;
+}
+
+export const apiCallSignInWithGoogle = async (idToken: string) => {
+  const result = await v1client.post<SignInWithGoogleResponse>("/auth/google", {
     idToken,
   });
 

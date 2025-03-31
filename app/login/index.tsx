@@ -7,25 +7,11 @@ import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 
 import { useEffect, useState } from "react";
-import { signInWithGoogle } from "@/api/auth.api";
+import { apiCallSignInWithGoogle } from "@/api/auth.api";
 import { Prompt, ResponseType } from "expo-auth-session";
+import { User } from "@/constants/users.interface";
 
 WebBrowser.maybeCompleteAuthSession();
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  googleId: string;
-  avatar: string;
-  createdAt: Date;
-  updatedAt: Date;
-  roleId: string;
-  role: {
-    type: string;
-  };
-}
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
@@ -64,11 +50,15 @@ export default function Login() {
   const getUserInformation = async (token: string) => {
     if (!token) return;
     try {
-      const result = await signInWithGoogle(token);
+      const result = await apiCallSignInWithGoogle(token);
 
       console.log({ result });
 
-      setUser(result);
+      if (!result.user) {
+        return;
+      }
+
+      setUser(result.user);
     } catch (error) {
       console.error(error);
     }
