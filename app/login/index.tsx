@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, Text, StyleSheet, Image, Button } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
@@ -6,16 +6,19 @@ import * as WebBrowser from "expo-web-browser";
 
 import * as Google from "expo-auth-session/providers/google";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { apiCallSignInWithGoogle } from "@/api/auth.api";
 import { Prompt, ResponseType } from "expo-auth-session";
 import { User } from "@/constants/users.interface";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import ThemedButton, { ThemedButtonText } from "@/components/ThemedButton";
+import { Colors } from "@/constants/Colors";
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
 
   const [, response, promptAsync] = Google.useIdTokenAuthRequest({
     iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID || "",
@@ -47,17 +50,26 @@ export default function Login() {
     setLoading(false);
   };
 
+  // ref
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
+  const handleClosePress = () => bottomSheetRef.current?.close();
+  const handleOpen = () => bottomSheetRef.current?.expand();
+
   const getUserInformation = async (token: string) => {
     if (!token) return;
     try {
       const result = await apiCallSignInWithGoogle(token);
 
-      console.log({ result });
+      console.log({ requiresTwoFactor: result.requiresTwoFactor });
+
+      if (result.requiresTwoFactor) {
+        handleOpen();
+      }
 
       if (!result.user) {
         return;
       }
-
       setUser(result.user);
     } catch (error) {
       console.error(error);
@@ -65,19 +77,14 @@ export default function Login() {
   };
 
   return (
-    <View>
+    <GestureHandlerRootView
+      style={{
+        flex: 1,
+        height: "100%",
+      }}
+    >
       <SafeAreaView>
         <View>
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: "bold",
-              padding: 20,
-              color: "white",
-            }}
-          >
-            Hola {user?.name} {user?.email}
-          </Text>
           <Image
             style={{
               width: 100,
@@ -92,24 +99,55 @@ export default function Login() {
         </View>
         <View style={styles.authContainer}>
           {!user && (
-            <TouchableOpacity
-              onPress={handlePressAsync}
-              style={styles.googleButton}
-              disabled={loading}
-            >
+            <ThemedButton onPress={handlePressAsync}>
               {!loading && (
-                <AntDesign name="google" size={24} color="#4285F4" />
+                <AntDesign
+                  name="google"
+                  size={24}
+                  color={Colors.dark.buttonText}
+                  style={{ marginRight: 10 }}
+                />
               )}
               {loading ? (
-                <Text style={styles.googleButtonText}>Loading...</Text>
+                <ThemedButtonText>Loading...</ThemedButtonText>
               ) : (
-                <Text style={styles.googleButtonText}>Sign in with Google</Text>
+                <ThemedButtonText>Sign in with Google</ThemedButtonText>
               )}
-            </TouchableOpacity>
+            </ThemedButton>
+            /* <TouchableOpacity */
+            /*   onPress={handlePressAsync} */
+            /*   style={styles.googleButton} */
+            /*   disabled={loading} */
+            /* > */
+            /* </TouchableOpacity> */
           )}
         </View>
       </SafeAreaView>
-    </View>
+
+      <BottomSheet
+        enableDynamicSizing={false}
+        handleStyle={{
+          display: "none",
+        }}
+        snapPoints={["75%"]}
+        index={-1}
+        ref={bottomSheetRef}
+        backgroundStyle={{ backgroundColor: "white" }}
+      >
+        <BottomSheetView>
+          <View
+            style={{
+              padding: 20,
+              height: 200,
+              borderRadius: 8,
+            }}
+          >
+            <Button title="Close" onPress={handleClosePress} />
+            <Text>Awesome 🎉</Text>
+          </View>
+        </BottomSheetView>
+      </BottomSheet>
+    </GestureHandlerRootView>
   );
 }
 

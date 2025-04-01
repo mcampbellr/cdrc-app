@@ -1,17 +1,14 @@
-import ThemedButton from "@/components/ThemedButton";
+import ThemedButton, { ThemedButtonText } from "@/components/ThemedButton";
 import { ThemedText } from "@/components/ThemedText";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { router } from "expo-router";
-import React, { FC, ReactNode, useRef } from "react";
+import React, { useRef } from "react";
 import {
   View,
   Image,
   StyleSheet,
   Dimensions,
   Animated,
-  Text,
-  TouchableOpacity,
-  TouchableOpacityProps,
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from "react-native";
@@ -136,7 +133,7 @@ export default function Onboarding() {
                 });
               }}
             >
-              Saltar
+              <ThemedButtonText>Saltar</ThemedButtonText>
             </ThemedButton>
           )}
 
@@ -153,7 +150,9 @@ export default function Onboarding() {
               });
             }}
           >
-            {currentIndex === data.length - 1 ? "Empecemos" : "Siguiente"}
+            <ThemedButtonText>
+              {currentIndex === data.length - 1 ? "Empecemos" : "Siguiente"}
+            </ThemedButtonText>
           </ThemedButton>
         </View>
       </SafeAreaView>
