@@ -32,12 +32,20 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? darkTheme : lightTheme}>
       <SafeAreaProvider>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-          <Stack.Screen name="login/index" options={{ headerShown: false }} />
-          <Stack.Screen name="oauthredirect" options={{ headerShown: false }} />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="index" />
+          <Stack.Screen name="onboarding" />
+          <Stack.Screen name="login/index" />
+          <Stack.Screen name="oauthredirect" />
+          <Stack.Screen name="settings/about" />
+          <Stack.Screen
+            name="(private)"
+            options={{ headerShown: false, title: "Home" }}
+          />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />

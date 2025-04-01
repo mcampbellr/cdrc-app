@@ -5,7 +5,7 @@ import { useAppStore } from "@/state/app.store";
 import { useUserStore } from "@/state/users.store";
 import { useRouter } from "expo-router";
 import { useEffect, useMemo } from "react";
-import { ActivityIndicator, View, StyleSheet } from "react-native";
+import { ActivityIndicator, View, StyleSheet, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as NavigationBar from "expo-navigation-bar";
 import { apiCallGetProfile } from "@/api/security.api";
@@ -18,8 +18,10 @@ export default function App() {
   const userStore = useUserStore();
 
   useEffect(() => {
-    NavigationBar.setBackgroundColorAsync(colors.surfacePrimary);
-    NavigationBar.setButtonStyleAsync("light"); // or "dark"
+    if (Platform.OS === "android") {
+      NavigationBar.setBackgroundColorAsync(colors.surfacePrimary);
+      NavigationBar.setButtonStyleAsync("light"); // or "dark"
+    }
   }, []);
 
   useEffect(() => {
@@ -28,7 +30,7 @@ export default function App() {
         if (userStore.user) {
           try {
             await apiCallGetProfile();
-            router.replace("/(tabs)");
+            router.replace("/(private)");
           } catch (error) {
             userStore.clear();
             router.replace("/login");

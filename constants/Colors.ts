@@ -16,21 +16,20 @@ const colors = {
     600: "red",
   },
   gray: {
-    100: "#F7F7F7",
-    200: "#E1E1E1",
-    300: "#CFCFCF",
-    400: "#B1B1B1",
-    500: "#9E9E9E",
-    600: "#7E7E7E",
-    700: "#626262",
-    800: "#515151",
-    900: "#3B3B3B",
+    100: "#E5E5E5",
+    200: "#CCCCCC",
+    300: "#B2B2B2",
+    400: "#999999",
+    500: "#808080",
+    600: "#666666",
+    700: "#4D4D4D",
   },
 };
 
 export interface ColorsThemePalette {
   text: string;
   surfacePrimary: string;
+  surfaceInverted: string;
   buttonBackground: string;
   buttonText: string;
   cardBackground: string;
@@ -52,6 +51,7 @@ export const Colors: ColorsTheme = {
     text: "#11181C",
     cardBackground: colors.gray[100],
     surfacePrimary: colors.gray[200],
+    surfaceInverted: colors.brand[500],
     buttonBackground: colors.accent[400],
     buttonText: colors.brand[700],
     navBackground: colors.accent[400],
@@ -63,6 +63,7 @@ export const Colors: ColorsTheme = {
     text: "#ECEDEE",
     cardBackground: colors.gray[700],
     surfacePrimary: colors.brand[500],
+    surfaceInverted: colors.gray[200],
     buttonBackground: colors.accent[400],
     navBackground: colors.accent[400],
     navText: colors.accent[500],
