@@ -8,10 +8,10 @@ export default function OAuthRedirectHandler() {
   const userStore = useUserStore();
 
   useEffect(() => {
-    if (!userStore.goggleToken) return;
+    if (!userStore.googleToken) return;
     // Redirige inmediatamente o simplemente ignora
     router.replace("/login");
-  }, [userStore.goggleToken]);
+  }, [userStore.googleToken]);
 
   return null;
 }

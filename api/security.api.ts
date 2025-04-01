@@ -33,3 +33,9 @@ export const apiCallSignInWithGoogle = async (idToken: string) => {
 
   return result.data;
 };
+
+export const apiCallGetProfile = async () => {
+  const result = await api.get<User>("/v1/auth/me");
+
+  return result.data;
+};

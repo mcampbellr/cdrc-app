@@ -8,10 +8,12 @@ const colors = {
     350: "#404857",
     400: "#101A2D",
     500: "#0C1322",
-    700: "#A37B31",
+    700: "#04060B",
   },
   accent: {
-    400: "#A37B31",
+    400: "#D9A441",
+    500: "#6D5221",
+    600: "red",
   },
   gray: {
     100: "#F7F7F7",
@@ -32,6 +34,9 @@ export interface ColorsThemePalette {
   buttonBackground: string;
   buttonText: string;
   cardBackground: string;
+  navBackground: string;
+  navText: string;
+  navTextActive: string;
   border: string;
 }
 
@@ -49,6 +54,9 @@ export const Colors: ColorsTheme = {
     surfacePrimary: colors.gray[200],
     buttonBackground: colors.accent[400],
     buttonText: colors.brand[700],
+    navBackground: colors.accent[400],
+    navTextActive: colors.brand[500],
+    navText: colors.accent[500],
     border: colors.gray[300],
   },
   dark: {
@@ -56,6 +64,9 @@ export const Colors: ColorsTheme = {
     cardBackground: colors.gray[700],
     surfacePrimary: colors.brand[500],
     buttonBackground: colors.accent[400],
+    navBackground: colors.accent[400],
+    navText: colors.accent[500],
+    navTextActive: colors.brand[500],
     border: colors.gray[600],
     buttonText: colors.brand[500],
   },

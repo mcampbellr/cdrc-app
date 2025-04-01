@@ -1,4 +1,8 @@
-import { getRefreshToken, saveRefreshToken } from "@/state/refreshToken.store";
+import {
+  deleteRefreshToken,
+  getRefreshToken,
+  saveRefreshToken,
+} from "@/state/refreshToken.store";
 import { useUserStore } from "@/state/users.store";
 import axios from "axios";
 
@@ -65,10 +69,15 @@ api.interceptors.response.use(
 
       try {
         const refreshToken = await getRefreshToken();
+        const userId = useUserStore.getState().user?.id;
+
+        if (!refreshToken || !userId) {
+          throw new Error("No refresh token or user ID found");
+        }
 
         const { data } = await api.post("/v1/auth/refresh", {
           refreshToken,
-          source: "native",
+          userId,
         });
 
         const newToken = data.accessToken;
@@ -85,7 +94,12 @@ api.interceptors.response.use(
       } catch (err) {
         processQueue(err, null);
 
-        useUserStore.setState({ accessToken: null, user: null });
+        await deleteRefreshToken();
+        useUserStore.setState({
+          accessToken: null,
+          user: null,
+          googleToken: null,
+        });
         window.location.href = "/login";
 
         return Promise.reject(err);

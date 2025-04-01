@@ -8,6 +8,7 @@ import { useEffect, useMemo } from "react";
 import { ActivityIndicator, View, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as NavigationBar from "expo-navigation-bar";
+import { apiCallGetProfile } from "@/api/security.api";
 
 export default function App() {
   const { colors } = useThemeColors();
@@ -22,11 +23,16 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      console.log(userStore.user);
+    const timeout = setTimeout(async () => {
       if (appStore.onboardingCompleted) {
         if (userStore.user) {
-          router.replace("/(tabs)");
+          try {
+            await apiCallGetProfile();
+            router.replace("/(tabs)");
+          } catch (error) {
+            userStore.clear();
+            router.replace("/login");
+          }
         } else {
           router.replace("/login");
         }
@@ -36,7 +42,7 @@ export default function App() {
     }, 10);
 
     return () => clearTimeout(timeout);
-  }, [appStore.onboardingCompleted]);
+  }, [appStore.onboardingCompleted, userStore.user]);
 
   return (
     <SafeAreaView>

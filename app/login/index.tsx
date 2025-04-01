@@ -28,6 +28,7 @@ import {
 } from "@/api/security.api";
 import { saveRefreshToken } from "@/state/refreshToken.store";
 import { useGoogleAuth } from "@/hooks/useGoogleAuth";
+import { router } from "expo-router";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -53,7 +54,7 @@ export default function Login() {
 
   const handlePressAsync = async () => {
     setLoading(true);
-    if (userStore.goggleToken) {
+    if (userStore.googleToken) {
       handleSignIn();
       return;
     }
@@ -63,11 +64,11 @@ export default function Login() {
   useEffect(() => {
     if (user) return;
     handleSignIn();
-  }, [userStore.goggleToken, user]);
+  }, [userStore.googleToken, user]);
 
   const handleSignIn = () => {
-    if (!userStore.goggleToken) return;
-    getUserInformation(userStore.goggleToken);
+    if (!userStore.googleToken) return;
+    getUserInformation(userStore.googleToken);
     setLoading(false);
   };
 
@@ -99,7 +100,6 @@ export default function Login() {
       const { data } = await apiCallValidateMFAToken(otp, preAuthToken);
       await handleSuccessLoging(data.accessToken, data.refreshToken);
     } catch (error) {
-      console.error(error);
       otpInputRef.current?.clear();
       setLoading(false);
     }
@@ -111,7 +111,12 @@ export default function Login() {
   ) => {
     await userStore.setUser(accessToken);
     await saveRefreshToken(refreshToken);
-    console.log({ accessToken, refreshToken });
+    setLoading(false);
+    bottomSheetRef.current?.close();
+    setModalVisible(false);
+    setOtpAsked(false);
+    otpInputRef.current?.clear();
+    router.replace("/(tabs)");
   };
 
   useEffect(() => {
