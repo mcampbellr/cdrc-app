@@ -31,6 +31,8 @@ export interface ColorsThemePalette {
   surfacePrimary: string;
   buttonBackground: string;
   buttonText: string;
+  cardBackground: string;
+  border: string;
 }
 
 export interface ColorsTheme {
@@ -43,14 +45,18 @@ export const Colors: ColorsTheme = {
   primary: colors.brand[400],
   light: {
     text: "#11181C",
+    cardBackground: colors.gray[100],
     surfacePrimary: colors.gray[200],
     buttonBackground: colors.accent[400],
     buttonText: colors.brand[700],
+    border: colors.gray[300],
   },
   dark: {
     text: "#ECEDEE",
+    cardBackground: colors.gray[700],
     surfacePrimary: colors.brand[500],
     buttonBackground: colors.accent[400],
+    border: colors.gray[600],
     buttonText: colors.brand[500],
   },
 };

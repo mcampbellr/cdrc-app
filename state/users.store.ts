@@ -1,13 +1,16 @@
 import api from "@/api/client.api";
 import { User } from "@/constants/users.interface";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 interface UserStore {
   user: User | null;
   accessToken: string | null;
   setUser: (accessToken: string) => Promise<void>;
   updateProfile: () => Promise<void>;
+  goggleToken: string | null;
+  setGoogleToken: (token: string | null) => void;
   logout: () => Promise<void>;
 }
 
@@ -16,6 +19,10 @@ export const useUserStore = create<UserStore>()(
     (set, _get) => ({
       user: null,
       accessToken: null,
+      goggleToken: null,
+      setGoogleToken: (token) => {
+        set(() => ({ goggleToken: token }));
+      },
       updateProfile: async () => {
         const { data } = await api.get("/v1/auth/me");
         set(() => ({ user: data }));
@@ -39,6 +46,7 @@ export const useUserStore = create<UserStore>()(
     }),
     {
       name: "user",
+      storage: createJSONStorage(() => AsyncStorage),
     },
   ),
 );

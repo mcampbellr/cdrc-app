@@ -1,6 +1,7 @@
 import ThemedButton, { ThemedButtonText } from "@/components/ThemedButton";
 import { ThemedText } from "@/components/ThemedText";
 import { useThemeColors } from "@/hooks/useThemeColors";
+import { useAppStore } from "@/state/app.store";
 import { router } from "expo-router";
 import React, { useRef } from "react";
 import {
@@ -46,6 +47,7 @@ export default function Onboarding() {
   const flatListRef = useRef<Animated.FlatList<any>>(null);
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const { colors } = useThemeColors();
+  const appStore = useAppStore();
 
   return (
     <GestureHandlerRootView>
@@ -140,6 +142,7 @@ export default function Onboarding() {
           <ThemedButton
             onPress={() => {
               if (currentIndex === data.length - 1) {
+                appStore.setOnboardingCompleted(true);
                 router.replace("/login");
                 return;
               }

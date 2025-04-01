@@ -1,3 +1,4 @@
+import { getRefreshToken, saveRefreshToken } from "@/state/refreshToken.store";
 import { useUserStore } from "@/state/users.store";
 import axios from "axios";
 
@@ -63,10 +64,17 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const { data } = await api.post("/v1/auth/refresh");
+        const refreshToken = await getRefreshToken();
+
+        const { data } = await api.post("/v1/auth/refresh", {
+          refreshToken,
+          source: "native",
+        });
+
         const newToken = data.accessToken;
 
         useUserStore.setState({ accessToken: newToken });
+        await saveRefreshToken(data.refreshToken);
         api.defaults.headers.common.Authorization = `Bearer ${newToken}`;
         processQueue(null, newToken);
 
