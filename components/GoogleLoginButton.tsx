@@ -2,6 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import ThemedButton, { ThemedButtonText } from "./ThemedButton";
 import GoogleSvg from "./GoogleSvg";
+import { useThemeColors } from "@/hooks/useThemeColors";
 
 interface GoogleLoginButtonProps {
   loading: boolean;
@@ -16,13 +17,14 @@ export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
   label = "Continuar con Google",
   loadingText = "Cargando...",
 }) => {
+  const { colors } = useThemeColors();
   return (
     <ThemedButton
       loading={loading}
       loadingText={loadingText}
       onPress={handlePressAsync}
       style={{
-        backgroundColor: "#CCCCCC",
+        backgroundColor: colors.surfaceInverted,
       }}
     >
       <View
@@ -32,7 +34,13 @@ export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
       >
         <GoogleSvg />
       </View>
-      <ThemedButtonText>{label}</ThemedButtonText>
+      <ThemedButtonText
+        style={{
+          color: colors.surfacePrimary,
+        }}
+      >
+        {label}
+      </ThemedButtonText>
     </ThemedButton>
   );
 };

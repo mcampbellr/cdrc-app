@@ -1,26 +1,50 @@
-import React from "react";
-import { View, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useMemo } from "react";
+import {
+  Animated,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  Platform,
+} from "react-native";
 import BrandLogo from "./BrandLogo";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import { Octicons } from "@expo/vector-icons";
+import { useAppHeader } from "@/context/AppHeaderContext";
+import { ThemedText } from "./ThemedText";
+import * as Haptics from "expo-haptics";
 
 interface CenteredHeaderProps {
-  showLogo?: boolean;
+  title?: string;
   showBackButton?: boolean;
+  showLogo?: boolean;
 }
 
 const AppHeader: React.FC<CenteredHeaderProps> = ({
-  showLogo = true,
   showBackButton = false,
+  showLogo = true,
+  title,
 }) => {
   const { colors } = useThemeColors();
+  const router = useRouter();
   const navigation = useNavigation();
+  const { right, showLogo: dinamicShowLogo } = useAppHeader();
   const insets = useSafeAreaInsets();
 
+  const shouldShowLogo = useMemo(
+    () => showLogo && dinamicShowLogo,
+    [showLogo, dinamicShowLogo],
+  );
+
   const canGoBack = (navigation.canGoBack() && showBackButton) || false;
+
+  const goBackHandler = () => {
+    if (Platform.OS === "android") {
+      Haptics.selectionAsync();
+    }
+    router.back();
+  };
 
   return (
     <View
@@ -33,7 +57,7 @@ const AppHeader: React.FC<CenteredHeaderProps> = ({
         <View style={styles.side}>
           {canGoBack && (
             <TouchableOpacity
-              onPress={() => navigation.goBack()}
+              onPress={goBackHandler}
               style={[
                 styles.backButton,
                 { backgroundColor: colors.buttonBackground },
@@ -49,10 +73,29 @@ const AppHeader: React.FC<CenteredHeaderProps> = ({
         </View>
 
         <View style={styles.center}>
-          {showLogo && <BrandLogo height={40} fill={colors.surfaceInverted} />}
+          <Animated.View
+            style={[styles.absoluteCenter, { height: 40, width: 40 }]}
+          >
+            {shouldShowLogo && (
+              <TouchableOpacity
+                onPress={() => {
+                  router.dismissTo("/(private)");
+                }}
+              >
+                <BrandLogo fill={colors.surfaceInverted} />
+              </TouchableOpacity>
+            )}
+          </Animated.View>
+          <Animated.View style={[styles.absoluteCenter]}>
+            {title && (
+              <ThemedText type="title" style={{ fontSize: 18 }}>
+                {title}
+              </ThemedText>
+            )}
+          </Animated.View>
         </View>
 
-        <View style={styles.side} />
+        <View style={styles.side}>{right && right}</View>
       </View>
     </View>
   );
@@ -78,6 +121,13 @@ const styles = StyleSheet.create({
   },
   center: {
     flex: 1,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative",
+  },
+  absoluteCenter: {
+    position: "absolute",
     alignItems: "center",
     justifyContent: "center",
   },

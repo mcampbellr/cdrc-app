@@ -116,7 +116,7 @@ export default function Login() {
     setModalVisible(false);
     setOtpAsked(false);
     otpInputRef.current?.clear();
-    router.replace("/(tabs)");
+    router.replace("/(private)");
   };
 
   useEffect(() => {
@@ -179,7 +179,6 @@ export default function Login() {
               <BrandLogo />
             </View>
             <View style={styles.authContainer}>
-              <Text>{JSON.stringify(user, null, 2)}</Text>
               {!user && (
                 <GoogleLoginButton
                   loading={loading}

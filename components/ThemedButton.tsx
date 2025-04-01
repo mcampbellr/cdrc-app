@@ -1,7 +1,8 @@
 import { useThemeColors } from "@/hooks/useThemeColors";
-import { FC, PropsWithChildren, ReactNode } from "react";
+import { FC, ReactNode } from "react";
 import { TouchableOpacity, Text, View, ActivityIndicator } from "react-native";
 import { TouchableOpacityProps } from "react-native-gesture-handler";
+import { TextProps } from "react-native-svg";
 
 interface ThemeButtonProps extends TouchableOpacityProps {
   label?: string;
@@ -10,7 +11,14 @@ interface ThemeButtonProps extends TouchableOpacityProps {
   loadingText?: string;
 }
 
-export const ThemedButtonText: FC<PropsWithChildren> = ({ children }) => {
+interface ThemedButtonTextProps extends TextProps {
+  children: ReactNode;
+}
+
+export const ThemedButtonText: FC<ThemedButtonTextProps> = ({
+  children,
+  ...rest
+}) => {
   const { colors } = useThemeColors();
   return (
     <Text
@@ -19,6 +27,7 @@ export const ThemedButtonText: FC<PropsWithChildren> = ({ children }) => {
         fontWeight: "bold",
         color: colors.buttonText,
       }}
+      {...rest}
     >
       {children}
     </Text>

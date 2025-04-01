@@ -3,6 +3,7 @@ import { useThemeColors } from "@/hooks/useThemeColors";
 import { Tabs } from "expo-router";
 import Octicons from "@expo/vector-icons/Octicons";
 import AppHeader from "@/components/AppHeader";
+import SkinCareIcon from "@/components/svg/SkinCareIcon";
 
 export default function TabLayout() {
   const { colors } = useThemeColors();
@@ -38,18 +39,19 @@ export default function TabLayout() {
         />
 
         <Tabs.Screen
+          name="skincare"
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <SkinCareIcon color={color} size={size} />
+            ),
+          }}
+        />
+
+        <Tabs.Screen
           name="messages"
           options={{
             tabBarIcon: ({ color, size }) => (
               <Octicons size={size} name="mail" color={color} />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="settings"
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Octicons size={size} name="gear" color={color} />
             ),
           }}
         />

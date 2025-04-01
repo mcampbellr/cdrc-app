@@ -1,9 +1,8 @@
 import { ColorsThemePalette } from "@/constants/Colors";
 import { useThemeColors } from "@/hooks/useThemeColors";
-import { FontAwesome } from "@expo/vector-icons";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import React, { useMemo } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
 
 function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const { colors } = useThemeColors();
@@ -13,12 +12,6 @@ function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
     <View style={styles.tabbar}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
-        const label =
-          options.tabBarLabel !== undefined
-            ? options.tabBarLabel
-            : options.title !== undefined
-              ? options.title
-              : route.name;
         const { tabBarIcon: TabBarIcon } = options;
 
         const isFocused = state.index === index;
@@ -80,7 +73,7 @@ const themedStyles = (theme: ColorsThemePalette) => {
     },
     tabbar: {
       position: "absolute",
-      marginHorizontal: 20,
+      marginHorizontal: 15,
       justifyContent: "space-around",
       borderRadius: 999,
       bottom: 35,

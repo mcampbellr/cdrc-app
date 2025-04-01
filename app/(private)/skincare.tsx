@@ -4,7 +4,7 @@ import { ThemedText } from "@/components/ThemedText";
 export default function Page() {
   return (
     <AppPageWragger>
-      <ThemedText>Messages</ThemedText>
+      <ThemedText>Skin Care</ThemedText>
     </AppPageWragger>
   );
 }
