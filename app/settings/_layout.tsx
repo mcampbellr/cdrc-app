@@ -7,7 +7,7 @@ export default function SettingsLayout() {
     <Stack
       screenOptions={{
         header: ({ options }) => (
-          <AppHeader showBackButton title={options.title} showLogo={false} />
+          <AppHeader showBackButton showLogo={false} options={options} />
         ),
         animation: Platform.OS === "android" ? "slide_from_bottom" : "default",
       }}
@@ -21,7 +21,16 @@ export default function SettingsLayout() {
       <Stack.Screen
         name="about"
         options={{
+          presentation: "modal",
           title: "Acerca de CDR App",
+        }}
+      />
+
+      <Stack.Screen
+        name="configs"
+        options={{
+          presentation: "modal",
+          title: "Configuraciones",
         }}
       />
     </Stack>

@@ -1,14 +1,15 @@
+import AppImageGradient from "@/components/AppImageGradient";
 import ThemedButton, { ThemedButtonText } from "@/components/ThemedButton";
 import { ThemedText } from "@/components/ThemedText";
+import { ColorsThemePalette } from "@/constants/Colors";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { useAppStore } from "@/state/app.store";
-import { router } from "expo-router";
-import React, { useRef } from "react";
+import { useRouter } from "expo-router";
+import { useRef, useState } from "react";
 import {
-  View,
-  Image,
-  StyleSheet,
   Dimensions,
+  View,
+  StyleSheet,
   Animated,
   NativeSyntheticEvent,
   NativeScrollEvent,
@@ -16,8 +17,7 @@ import {
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const { width } = Dimensions.get("window");
-
+const { height, width } = Dimensions.get("window");
 const data = [
   {
     number: 1,
@@ -43,91 +43,99 @@ const data = [
 ];
 
 export default function Onboarding() {
+  const router = useRouter();
+  const { colors } = useThemeColors();
   const scrollX = useRef(new Animated.Value(0)).current;
   const flatListRef = useRef<Animated.FlatList<any>>(null);
-  const [currentIndex, setCurrentIndex] = React.useState(0);
-  const { colors } = useThemeColors();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const styles = themeStyles(colors);
   const appStore = useAppStore();
 
   return (
-    <GestureHandlerRootView>
-      <SafeAreaView>
-        <Animated.FlatList
-          data={data}
-          horizontal
-          ref={flatListRef}
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-            {
-              useNativeDriver: false,
-              listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-                const x = event.nativeEvent.contentOffset.x + 0.01;
-                const index = Math.round(x / width);
+    <GestureHandlerRootView style={styles.itemContainer}>
+      <Animated.FlatList
+        data={data}
+        horizontal
+        ref={flatListRef}
+        showsHorizontalScrollIndicator={false}
+        pagingEnabled
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+          {
+            useNativeDriver: false,
+            listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+              const x = event.nativeEvent.contentOffset.x + 0.01;
+              const index = Math.round(x / width);
 
-                setCurrentIndex(index);
-              },
+              setCurrentIndex(index);
             },
-          )}
-          keyExtractor={({ number }) => number.toString()}
-          renderItem={({ item }) => {
-            return (
-              <View style={styles.itemContainer}>
-                <Image
-                  style={{ height: 480 }}
-                  resizeMode="contain"
-                  source={item.image}
-                />
-                <View style={styles.textContainer}>
-                  <ThemedText
-                    type="title"
-                    style={{ fontSize: 38, lineHeight: 50 }}
-                  >
-                    {item.title}
-                  </ThemedText>
-                  <ThemedText style={{ paddingTop: 10, fontSize: 16 }}>
-                    {item.description}
-                  </ThemedText>
-                </View>
-              </View>
-            );
-          }}
-        />
-
-        <View style={styles.indicatorContainer}>
-          {data.map((_, index) => {
-            const inputRange = [
-              (index - 1) * width,
-              index * width,
-              (index + 1) * width,
-            ];
-
-            const widthAnimated = scrollX.interpolate({
-              inputRange,
-              outputRange: [15, 50, 15],
-              extrapolate: "clamp",
-            });
-
-            return (
-              <Animated.View
-                key={index}
-                style={[
-                  styles.indicator,
-                  {
-                    width: widthAnimated,
-                    backgroundColor: colors.text,
-                  },
-                ]}
+          },
+        )}
+        keyExtractor={({ number }) => number.toString()}
+        renderItem={({ item }) => {
+          return (
+            <View style={styles.itemContainer}>
+              <AppImageGradient
+                image={item.image}
+                color={colors.surfacePrimary}
+                height={height * 0.55}
+                width={width}
               />
-            );
-          })}
-        </View>
+              <View style={styles.textContainer}>
+                <ThemedText
+                  numberOfLines={2}
+                  style={{
+                    fontSize: 38,
+                    fontWeight: "bold",
+                    marginBottom: 10,
+                    textAlign: "left",
+                    flexWrap: "wrap",
+                    lineHeight: 42,
+                  }}
+                >
+                  {item.title}
+                </ThemedText>
+                <ThemedText>{item.description}</ThemedText>
+              </View>
+            </View>
+          );
+        }}
+      />
 
-        {/* Button container */}
+      <View style={styles.indicatorContainer}>
+        {data.map((_, index) => {
+          const inputRange = [
+            (index - 1) * width,
+            index * width,
+            (index + 1) * width,
+          ];
+
+          const widthAnimated = scrollX.interpolate({
+            inputRange,
+            outputRange: [15, 50, 15],
+            extrapolate: "clamp",
+          });
+
+          return (
+            <Animated.View
+              key={index}
+              style={[
+                styles.indicator,
+                {
+                  width: widthAnimated,
+                  backgroundColor: colors.text,
+                },
+              ]}
+            />
+          );
+        })}
+      </View>
+
+      <SafeAreaView>
         <View style={styles.buttonContainer}>
           {currentIndex === 0 && (
             <ThemedButton
+              type="link"
               onPress={() => {
                 flatListRef.current?.scrollToIndex({
                   index: data.length - 1,
@@ -135,7 +143,13 @@ export default function Onboarding() {
                 });
               }}
             >
-              <ThemedButtonText>Saltar</ThemedButtonText>
+              <ThemedButtonText
+                style={{
+                  color: colors.text,
+                }}
+              >
+                Saltar
+              </ThemedButtonText>
             </ThemedButton>
           )}
 
@@ -154,7 +168,7 @@ export default function Onboarding() {
             }}
           >
             <ThemedButtonText>
-              {currentIndex === data.length - 1 ? "Empecemos" : "Siguiente"}
+              {currentIndex === data.length - 1 ? "Comencemos" : "Siguiente"}
             </ThemedButtonText>
           </ThemedButton>
         </View>
@@ -163,35 +177,36 @@ export default function Onboarding() {
   );
 }
 
-const styles = StyleSheet.create({
-  indicatorContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 30,
-    marginTop: 15,
-    gap: 10,
-  },
+const themeStyles = (colors: ColorsThemePalette) =>
+  StyleSheet.create({
+    itemContainer: {
+      flex: 1,
+      backgroundColor: colors.surfacePrimary,
+    },
 
-  indicator: {
-    height: 5,
-    borderRadius: 5,
-  },
+    textContainer: {
+      paddingHorizontal: 20,
+      width,
+    },
 
-  itemContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: width,
-  },
+    buttonContainer: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      gap: 10,
+      paddingHorizontal: 20,
+      marginBottom: 20,
+    },
 
-  buttonContainer: {
-    gap: 10,
-    marginTop: 10,
-    paddingHorizontal: 30,
-    flexDirection: "row",
-  },
+    indicatorContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      paddingHorizontal: 30,
+      marginBlock: 15,
+      gap: 10,
+    },
 
-  textContainer: {
-    width: "100%",
-    paddingHorizontal: 30,
-  },
-});
+    indicator: {
+      height: 5,
+      borderRadius: 5,
+    },
+  });

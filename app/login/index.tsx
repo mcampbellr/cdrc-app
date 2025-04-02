@@ -40,7 +40,7 @@ export default function Login() {
   const appState = useRef(AppState.currentState);
   const [otp, setOtp] = useState("");
   const [otpAsked, setOtpAsked] = useState(false);
-  const { promptAsync } = useGoogleAuth();
+  const { promptAsync, canceled } = useGoogleAuth();
 
   const [preAuthToken, setPreAuthToken] = useState<string | null>(null);
 
@@ -65,6 +65,12 @@ export default function Login() {
     if (user) return;
     handleSignIn();
   }, [userStore.googleToken, user]);
+
+  useEffect(() => {
+    if (canceled) {
+      setLoading(false);
+    }
+  }, [canceled]);
 
   const handleSignIn = () => {
     if (!userStore.googleToken) return;
@@ -176,7 +182,7 @@ export default function Login() {
                 justifyContent: "center",
               }}
             >
-              <BrandLogo />
+              <BrandLogo color={colors.text} size={175} />
             </View>
             <View style={styles.authContainer}>
               {!user && (

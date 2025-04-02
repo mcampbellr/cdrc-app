@@ -49,7 +49,10 @@ export default function App() {
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <ActivityIndicator></ActivityIndicator>
+        <ActivityIndicator
+          size={Platform.OS === "android" ? "large" : "small"}
+          color={colors.surfaceInverted}
+        />
         <ThemedText style={{ paddingTop: 10 }}>Cargando...</ThemedText>
       </View>
     </SafeAreaView>

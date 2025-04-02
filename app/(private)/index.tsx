@@ -1,14 +1,16 @@
+import Avatar from "@/components/AppAvatar";
 import AppPageWragger from "@/components/AppPageWrapper";
+import ViewWithImage from "@/components/ImageBackground";
 import { ThemedText } from "@/components/ThemedText";
 import { useHeaderRight } from "@/hooks/useHeader";
-import { useThemeColors } from "@/hooks/useThemeColors";
-import { Octicons } from "@expo/vector-icons";
+import { useUserStore } from "@/state/users.store";
 import { router } from "expo-router";
 import { useMemo } from "react";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function Page() {
-  const { colors } = useThemeColors();
+  const userStore = useUserStore();
 
   useHeaderRight(
     useMemo(
@@ -17,15 +19,13 @@ export default function Page() {
           onPress={() => router.push("/settings")}
           style={{
             borderRadius: 999,
-            borderWidth: 1,
-            borderColor: colors.surfaceInverted,
             height: 30,
             width: 30,
             justifyContent: "center",
             alignItems: "center",
           }}
         >
-          <Octicons name="person" size={18} color={colors.surfaceInverted} />
+          <Avatar name={userStore.user?.name || "Unknown"} size={35} />
         </TouchableOpacity>
       ),
       [],
@@ -33,8 +33,18 @@ export default function Page() {
   );
 
   return (
-    <AppPageWragger>
-      <ThemedText>Home</ThemedText>
-    </AppPageWragger>
+    <ScrollView>
+      <AppPageWragger>
+        <ViewWithImage>
+          <View style={{
+            padding: 20,
+          }}>
+            <ThemedText>
+              This is a private page, only accessible if the user is logged in.
+            </ThemedText>
+          </View>
+        </ViewWithImage>
+      </AppPageWragger>
+    </ScrollView>
   );
 }

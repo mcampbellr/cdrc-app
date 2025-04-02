@@ -28,6 +28,7 @@ const colors = {
 
 export interface ColorsThemePalette {
   text: string;
+  textNegative: string;
   surfacePrimary: string;
   surfaceInverted: string;
   buttonBackground: string;
@@ -49,6 +50,7 @@ export const Colors: ColorsTheme = {
   primary: colors.brand[400],
   light: {
     text: "#11181C",
+    textNegative: "#FFFFFF",
     cardBackground: colors.gray[100],
     surfacePrimary: colors.gray[200],
     surfaceInverted: colors.brand[500],
@@ -61,6 +63,7 @@ export const Colors: ColorsTheme = {
   },
   dark: {
     text: "#ECEDEE",
+    textNegative: colors.brand[500],
     cardBackground: colors.gray[700],
     surfacePrimary: colors.brand[500],
     surfaceInverted: colors.gray[200],

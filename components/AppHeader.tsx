@@ -1,43 +1,52 @@
 import React, { useMemo } from "react";
 import {
-  Animated,
   View,
   TouchableOpacity,
   StyleSheet,
   Platform,
+  DimensionValue,
+  Alert,
 } from "react-native";
-import BrandLogo from "./BrandLogo";
-import { useThemeColors } from "@/hooks/useThemeColors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation, useRouter } from "expo-router";
 import { Octicons } from "@expo/vector-icons";
-import { useAppHeader } from "@/context/AppHeaderContext";
-import { ThemedText } from "./ThemedText";
 import * as Haptics from "expo-haptics";
 
+import BrandLogo from "./BrandLogo";
+import { useThemeColors } from "@/hooks/useThemeColors";
+import { useAppHeader } from "@/context/AppHeaderContext";
+import { ThemedText } from "./ThemedText";
+import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
+
 interface CenteredHeaderProps {
-  title?: string;
   showBackButton?: boolean;
   showLogo?: boolean;
+  options?: NativeStackNavigationOptions;
 }
 
 const AppHeader: React.FC<CenteredHeaderProps> = ({
   showBackButton = false,
   showLogo = true,
-  title,
+  options,
 }) => {
   const { colors } = useThemeColors();
   const router = useRouter();
   const navigation = useNavigation();
-  const { right, showLogo: dinamicShowLogo } = useAppHeader();
+  const { right, showLogo: dynamicShowLogo } = useAppHeader();
   const insets = useSafeAreaInsets();
 
-  const shouldShowLogo = useMemo(
-    () => showLogo && dinamicShowLogo,
-    [showLogo, dinamicShowLogo],
-  );
+  const shouldShowLogo = showLogo && dynamicShowLogo;
 
-  const canGoBack = (navigation.canGoBack() && showBackButton) || false;
+  const canGoBack =
+    showBackButton &&
+    typeof navigation.canGoBack === "function" &&
+    navigation.canGoBack();
+
+  const paddingTop = (): DimensionValue => {
+    return Platform.OS === "android" || options?.presentation !== "modal"
+      ? insets.top
+      : 0;
+  };
 
   const goBackHandler = () => {
     if (Platform.OS === "android") {
@@ -50,10 +59,14 @@ const AppHeader: React.FC<CenteredHeaderProps> = ({
     <View
       style={[
         styles.wrapper,
-        { paddingTop: insets.top, backgroundColor: colors.surfacePrimary },
+        {
+          paddingTop: paddingTop(),
+          backgroundColor: colors.surfacePrimary,
+        },
       ]}
     >
       <View style={styles.container}>
+        {/* Left side: back button */}
         <View style={styles.side}>
           {canGoBack && (
             <TouchableOpacity
@@ -72,30 +85,23 @@ const AppHeader: React.FC<CenteredHeaderProps> = ({
           )}
         </View>
 
+        {/* Center content: logo or title */}
         <View style={styles.center}>
-          <Animated.View
-            style={[styles.absoluteCenter, { height: 40, width: 40 }]}
-          >
-            {shouldShowLogo && (
-              <TouchableOpacity
-                onPress={() => {
-                  router.dismissTo("/(private)");
-                }}
-              >
-                <BrandLogo fill={colors.surfaceInverted} />
-              </TouchableOpacity>
-            )}
-          </Animated.View>
-          <Animated.View style={[styles.absoluteCenter]}>
-            {title && (
-              <ThemedText type="title" style={{ fontSize: 18 }}>
-                {title}
-              </ThemedText>
-            )}
-          </Animated.View>
+          {shouldShowLogo && (
+            <TouchableOpacity onPress={() => router.dismissTo?.("/(private)")}>
+              <BrandLogo fill={colors.surfaceInverted} />
+            </TouchableOpacity>
+          )}
+
+          {options?.title && (
+            <ThemedText type="title" style={{ fontSize: 18 }}>
+              {options.title}
+            </ThemedText>
+          )}
         </View>
 
-        <View style={styles.side}>{right && right}</View>
+        {/* Right side: custom content */}
+        <View style={styles.side}>{right}</View>
       </View>
     </View>
   );
@@ -122,12 +128,6 @@ const styles = StyleSheet.create({
   center: {
     flex: 1,
     height: 40,
-    alignItems: "center",
-    justifyContent: "center",
-    position: "relative",
-  },
-  absoluteCenter: {
-    position: "absolute",
     alignItems: "center",
     justifyContent: "center",
   },

@@ -1,14 +1,20 @@
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { FC, ReactNode } from "react";
-import { TouchableOpacity, Text, View, ActivityIndicator } from "react-native";
+import {
+  TouchableOpacity,
+  Text,
+  View,
+  ActivityIndicator,
+  TextProps,
+} from "react-native";
 import { TouchableOpacityProps } from "react-native-gesture-handler";
-import { TextProps } from "react-native-svg";
 
 interface ThemeButtonProps extends TouchableOpacityProps {
   label?: string;
   children?: ReactNode;
   loading?: boolean;
   loadingText?: string;
+  type?: "link" | "default";
 }
 
 interface ThemedButtonTextProps extends TextProps {
@@ -17,17 +23,19 @@ interface ThemedButtonTextProps extends TextProps {
 
 export const ThemedButtonText: FC<ThemedButtonTextProps> = ({
   children,
-  ...rest
+  style,
 }) => {
   const { colors } = useThemeColors();
   return (
     <Text
-      style={{
-        fontSize: 16,
-        fontWeight: "bold",
-        color: colors.buttonText,
-      }}
-      {...rest}
+      style={[
+        {
+          fontSize: 16,
+          fontWeight: "bold",
+          color: colors.buttonText,
+        },
+        style,
+      ]}
     >
       {children}
     </Text>
@@ -40,6 +48,7 @@ const ThemedButton: FC<ThemeButtonProps> = ({
   label,
   loading = false,
   loadingText = "Loading...",
+  type,
   style,
   ...rest
 }) => {
@@ -52,7 +61,8 @@ const ThemedButton: FC<ThemeButtonProps> = ({
       {...rest}
       style={[
         {
-          backgroundColor: colors.buttonBackground,
+          backgroundColor:
+            type === "link" ? "transparent" : colors.buttonBackground,
           flex: 1,
           paddingHorizontal: 30,
           paddingVertical: 10,
