@@ -14,7 +14,6 @@ const ViewWithImage = ({ children, borderRadius = 10 }: ViewWithImageProps) => {
       imageStyle={{ borderRadius }}
       resizeMode="cover"
     >
-      {/* Overlay */}
       <View
         style={[
           styles.overlay,
@@ -24,7 +23,6 @@ const ViewWithImage = ({ children, borderRadius = 10 }: ViewWithImageProps) => {
         ]}
       />
 
-      {/* Content on top of overlay */}
       <View style={styles.elementContainer}>{children}</View>
     </ImageBackground>
   );
@@ -43,7 +41,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0, 0, 0, 0.8)", // cambia el alpha si quieres más o menos opacidad
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
   },
   elementContainer: {
     zIndex: 1,

@@ -2,6 +2,7 @@ import Avatar from "@/components/AppAvatar";
 import AppPageWragger from "@/components/AppPageWrapper";
 import ViewWithImage from "@/components/ImageBackground";
 import { ThemedText } from "@/components/ThemedText";
+import { useNotification } from "@/context/NotificationContext";
 import { useHeaderRight } from "@/hooks/useHeader";
 import { useUserStore } from "@/state/users.store";
 import { router } from "expo-router";
@@ -11,6 +12,7 @@ import { ScrollView } from "react-native-gesture-handler";
 
 export default function Page() {
   const userStore = useUserStore();
+  const { expoPushToken, notification, error } = useNotification();
 
   useHeaderRight(
     useMemo(
@@ -36,12 +38,15 @@ export default function Page() {
     <ScrollView>
       <AppPageWragger>
         <ViewWithImage>
-          <View style={{
-            padding: 20,
-          }}>
+          <View
+            style={{
+              padding: 20,
+            }}
+          >
             <ThemedText>
               This is a private page, only accessible if the user is logged in.
             </ThemedText>
+            <View></View>
           </View>
         </ViewWithImage>
       </AppPageWragger>

@@ -12,9 +12,19 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Platform } from "react-native";
 import { AppHeaderProvider } from "@/context/AppHeaderContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import * as Notifications from "expo-notifications";
+import { NotificationProvider } from "@/context/NotificationContext";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: false,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -34,31 +44,33 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? darkTheme : lightTheme}>
-      <AppHeaderProvider>
-        <SafeAreaProvider>
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <Stack
-              screenOptions={{
-                headerShown: false,
-                animation:
-                  Platform.OS === "android" ? "slide_from_bottom" : "default",
-              }}
-            >
-              <Stack.Screen name="index" />
-              <Stack.Screen name="onboarding" />
-              <Stack.Screen name="login/index" />
-              <Stack.Screen name="oauthredirect" />
-              <Stack.Screen name="settings" />
-              <Stack.Screen
-                name="(private)"
-                options={{ headerShown: false, title: "Home" }}
-              />
-              <Stack.Screen name="+not-found" />
-            </Stack>
-            <StatusBar style="auto" />
-          </GestureHandlerRootView>
-        </SafeAreaProvider>
-      </AppHeaderProvider>
+      <NotificationProvider>
+        <AppHeaderProvider>
+          <SafeAreaProvider>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                  animation:
+                    Platform.OS === "android" ? "slide_from_bottom" : "default",
+                }}
+              >
+                <Stack.Screen name="index" />
+                <Stack.Screen name="onboarding" />
+                <Stack.Screen name="login/index" />
+                <Stack.Screen name="oauthredirect" />
+                <Stack.Screen name="settings" />
+                <Stack.Screen
+                  name="(private)"
+                  options={{ headerShown: false, title: "Home" }}
+                />
+                <Stack.Screen name="+not-found" />
+              </Stack>
+              <StatusBar style="auto" />
+            </GestureHandlerRootView>
+          </SafeAreaProvider>
+        </AppHeaderProvider>
+      </NotificationProvider>
     </ThemeProvider>
   );
 }

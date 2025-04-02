@@ -11,13 +11,15 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.mcampbellr.cdrcapp",
-      "usesAppleSignIn": false
+      "usesAppleSignIn": false,
+      "appleTeamId": "D8X2KM25L7"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "googleServicesFile": "./google-services.json",
       "package": "com.mcampbellr.cdrcapp"
     },
     "web": {
@@ -48,6 +50,7 @@
       "eas": {
         "projectId": "c0935bf0-6f98-47df-be06-1770fb424f18"
       }
-    }
+    },
+    "owner": "mcampbellr"
   }
 }
