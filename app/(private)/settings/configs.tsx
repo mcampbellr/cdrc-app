@@ -1,55 +1,34 @@
-import { ThemedText } from "@/components/ThemedText";
-import useLogout from "@/hooks/useLogout";
+import AppPageWragger from "@/components/AppPageWrapper";
+import SettingButton from "@/components/SettingButton";
+import SettingOptionSwich from "@/components/SettingOptionSwitch";
+import { useAppTheme } from "@/context/AppColorScheme";
+import { useLogoutConfirmation } from "@/hooks/useLogout";
+import { Octicons } from "@expo/vector-icons";
 import React from "react";
-import { Pressable, View, StyleSheet, Alert } from "react-native";
 
 export default function Page() {
-  const logout = useLogout();
+  const logout = useLogoutConfirmation();
 
-  const handleLogout = async () => {
-    await logout();
-  };
-
-  const showConfirmAlert = () => {
-    Alert.alert(
-      "Confirmación",
-      "Desea cerrar la sesión?",
-      [
-        {
-          text: "Cancelar",
-          style: "cancel",
-        },
-        {
-          text: "Sí, continuar",
-          style: "destructive",
-          onPress: () => handleLogout(),
-        },
-      ],
-      { cancelable: false },
-    );
-  };
+  const { theme, toggleTheme } = useAppTheme();
 
   return (
-    <>
-      <View style={styles.logoutButton}>
-        <Pressable onPress={showConfirmAlert}>
-          <ThemedText
-            style={{
-              color: "tomato",
-            }}
-          >
-            Cerrar session
-          </ThemedText>
-        </Pressable>
-      </View>
-    </>
+    <AppPageWragger>
+      <SettingOptionSwich
+        label="Modo oscuro"
+        value={theme === "dark"}
+        icon={(colors) => (
+          <Octicons name="moon" size={24} color={colors.textPrimary} />
+        )}
+        trigger={toggleTheme}
+      />
+      <SettingButton
+        onPress={logout}
+        label="Cerrar sesión"
+        showArrow={false}
+        icon={(colors) => (
+          <Octicons name="sign-out" size={24} color={colors.textPrimary} />
+        )}
+      />
+    </AppPageWragger>
   );
 }
-
-const styles = StyleSheet.create({
-  logoutButton: {
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 10,
-  },
-});

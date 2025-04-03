@@ -5,27 +5,41 @@ import { ReactNode } from "react";
 import { ThemedText } from "./ThemedText";
 import { Octicons } from "@expo/vector-icons";
 import { Href, router } from "expo-router";
+import { useDefaultStyles } from "@/hooks/useDefaultStyles";
 
 interface SettingButtonProps {
   icon: (colors: ColorsThemePalette, size: number) => ReactNode;
   label: string;
-  href: Href;
+  href?: Href;
+  onPress?: () => void;
   showArrow?: boolean;
+  rightElement?: ReactNode;
 }
 
 export default function SettingButton({
   icon,
   label,
   href,
+  onPress,
+  rightElement,
   showArrow = true,
 }: SettingButtonProps) {
   const { colors } = useThemeColors();
   const styles = themeStyles(colors);
+  const defaultStyles = useDefaultStyles();
 
   return (
     <TouchableOpacity
-      style={styles.container}
-      onPress={() => router.push(href)}
+      style={defaultStyles.SettingButton}
+      onPress={
+        onPress
+          ? onPress
+          : () => {
+              if (href) {
+                router.push(href);
+              }
+            }
+      }
     >
       <View style={styles.row}>
         <View style={styles.iconAndLabel}>
@@ -39,7 +53,7 @@ export default function SettingButton({
           <ThemedText style={styles.label}>{label}</ThemedText>
         </View>
         {/* Aquí podrías añadir una flecha si `showArrow` es true */}
-        {showArrow && (
+        {showArrow && !rightElement && (
           <View style={styles.arrow}>
             <Octicons
               name="chevron-right"
@@ -51,6 +65,7 @@ export default function SettingButton({
             />
           </View>
         )}
+        {rightElement && rightElement}
       </View>
     </TouchableOpacity>
   );
@@ -58,16 +73,6 @@ export default function SettingButton({
 
 const themeStyles = (colors: ColorsThemePalette) =>
   StyleSheet.create({
-    container: {
-      backgroundColor: colors.cardBackground,
-      paddingHorizontal: 20,
-      paddingVertical: 15,
-      borderRadius: 12,
-      marginBottom: 10,
-      justifyContent: "center",
-      minHeight: 55,
-      maxHeight: 55,
-    },
     arrow: {
       backgroundColor: colors.buttonBackgroundPrimary,
       borderRadius: 5,

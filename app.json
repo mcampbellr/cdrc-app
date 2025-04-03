@@ -15,17 +15,8 @@
       "appleTeamId": "D8X2KM25L7"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
       "googleServicesFile": "./google-services.json",
       "package": "com.mcampbellr.cdrcapp"
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
       "expo-router",
@@ -33,9 +24,9 @@
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
+          "imageWidth": 150,
           "resizeMode": "contain",
-          "backgroundColor": "#0E1223"
+          "backgroundColor": "#121210"
         }
       ],
       "expo-secure-store",

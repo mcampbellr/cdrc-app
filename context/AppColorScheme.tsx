@@ -1,7 +1,8 @@
 import { ThemeProvider } from "@react-navigation/native";
-import React, { createContext, useState, useContext, ReactNode } from "react";
+import React, { createContext, useContext, ReactNode, useEffect } from "react";
 import { ColorSchemeName, useColorScheme } from "react-native";
 import { darkTheme, lightTheme } from "@/constants/Colors";
+import { useAppStore } from "@/state/app.store";
 
 type ThemeContextType = {
   theme: ColorSchemeName;
@@ -13,17 +14,25 @@ const AppThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const AppThemeProvider = ({ children }: { children: ReactNode }) => {
   const systemColorScheme = useColorScheme();
 
-  const [theme, setTheme] = useState<ColorSchemeName>(
-    systemColorScheme || "dark",
-  );
+  const appStore = useAppStore();
+
+  useEffect(() => {
+    if (!appStore.colorMode) {
+      appStore.setColorMode(systemColorScheme);
+    }
+  }, [appStore.colorMode]);
 
   const toggleTheme = () => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+    appStore.setColorMode(appStore.colorMode === "dark" ? "light" : "dark");
   };
 
   return (
-    <AppThemeContext.Provider value={{ theme, toggleTheme }}>
-      <ThemeProvider value={theme === "dark" ? darkTheme : lightTheme}>
+    <AppThemeContext.Provider
+      value={{ theme: appStore.colorMode, toggleTheme }}
+    >
+      <ThemeProvider
+        value={appStore.colorMode === "dark" ? darkTheme : lightTheme}
+      >
         {children}
       </ThemeProvider>
     </AppThemeContext.Provider>

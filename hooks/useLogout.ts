@@ -5,6 +5,7 @@ import {
 } from "@/state/refreshToken.store";
 import { useUserStore } from "@/state/users.store";
 import { useNavigate } from "./useNavigate";
+import { Alert } from "react-native";
 
 export default function useLogout() {
   const userStore = useUserStore();
@@ -35,3 +36,25 @@ export default function useLogout() {
 
   return logout;
 }
+
+export const useLogoutConfirmation = () => {
+  const logout = useLogout();
+  return () => {
+    Alert.alert(
+      "Confirmación",
+      "Desea cerrar la sesión?",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Sí, continuar",
+          style: "destructive",
+          onPress: () => logout(),
+        },
+      ],
+      { cancelable: false },
+    );
+  };
+};

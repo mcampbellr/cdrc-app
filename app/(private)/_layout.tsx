@@ -1,6 +1,7 @@
 import { useUserStore } from "@/state/users.store";
 import { Stack, useRouter } from "expo-router";
 import React, { useEffect } from "react";
+import { Platform } from "react-native";
 
 export default function Layout() {
   const userStorage = useUserStore();
@@ -16,7 +17,7 @@ export default function Layout() {
     <Stack
       screenOptions={{
         headerShown: false,
-        animation: "slide_from_bottom",
+        animation: Platform.OS === "android" ? "slide_from_bottom" : "default",
       }}
     >
       <Stack.Screen name="(tabs)" key="tabs" />

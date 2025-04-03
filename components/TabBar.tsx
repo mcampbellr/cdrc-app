@@ -73,9 +73,9 @@ const themedStyles = (theme: ColorsThemePalette) => {
     },
     tabbar: {
       position: "absolute",
-      marginHorizontal: 15,
+      marginHorizontal: 20,
       justifyContent: "space-around",
-      borderRadius: 999,
+      borderRadius: 15,
       bottom: 35,
       backgroundColor: theme.navbarSurface,
       flexDirection: "row",

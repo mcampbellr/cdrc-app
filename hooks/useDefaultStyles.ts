@@ -5,6 +5,16 @@ export const useDefaultStyles = () => {
   const { colors } = useThemeColors();
 
   return StyleSheet.create({
+    SettingButton: {
+      backgroundColor: colors.cardBackground,
+      paddingHorizontal: 20,
+      paddingVertical: 15,
+      borderRadius: 12,
+      marginBottom: 10,
+      justifyContent: "center",
+      minHeight: 55,
+      maxHeight: 55,
+    },
     backButton: {
       backgroundColor: colors.buttonBackgroundPrimary,
       padding: 10,

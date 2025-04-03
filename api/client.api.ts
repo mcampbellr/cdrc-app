@@ -97,7 +97,6 @@ api.interceptors.response.use(
         useUserStore.setState({
           accessToken: null,
           user: null,
-          googleToken: null,
         });
         window.location.href = "/login";
 
