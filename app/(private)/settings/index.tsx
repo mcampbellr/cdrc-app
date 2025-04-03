@@ -5,18 +5,19 @@ import { ScrollView, StyleSheet } from "react-native";
 import { View } from "react-native";
 import SettingButton from "@/components/SettingButton";
 import { Octicons } from "@expo/vector-icons";
+import { useUserProfileService } from "@/hooks/services/useUserProfileService";
+import FullScreenLoader from "@/components/FullScreenLoader";
 
 export default function Settings() {
-  const userStore = useUserStore();
+  const { data: user, isLoading } = useUserProfileService();
+
+  if (isLoading || !user) return <FullScreenLoader></FullScreenLoader>;
+
   return (
     <ScrollView>
       <AppPageWrapper>
         <View style={styles.avatarContainer}>
-          <Avatar
-            name={userStore.user?.name || "Unknown"}
-            imageUrl={userStore.user?.avatar}
-            size={130}
-          />
+          <Avatar name={user.name} imageUrl={user?.avatar} size={130} />
         </View>
         <View style={{ gap: 8 }}>
           <SettingButton

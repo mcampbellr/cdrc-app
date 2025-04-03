@@ -74,7 +74,6 @@ const AppHeader: React.FC<CenteredHeaderProps> = ({
       ]}
     >
       <View style={styles.container}>
-        {/* Left side: back button */}
         <View style={styles.side}>
           {canGoBack && (
             <TouchableOpacity
@@ -93,7 +92,6 @@ const AppHeader: React.FC<CenteredHeaderProps> = ({
           )}
         </View>
 
-        {/* Center content: logo or title */}
         <View style={styles.center}>
           {shouldShowLogo && (
             <TouchableOpacity
@@ -110,7 +108,6 @@ const AppHeader: React.FC<CenteredHeaderProps> = ({
           )}
         </View>
 
-        {/* Right side: custom content */}
         <View style={styles.side}>{right}</View>
       </View>
     </View>

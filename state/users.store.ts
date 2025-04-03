@@ -4,19 +4,29 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 interface UserStore {
   accessToken: string | null;
-  logout: () => Promise<void>;
+  userId: string | null;
+  setAccessToken: (token: string) => void;
+  setUserId: (userId: string) => void;
   clear: () => void;
 }
+
+const initialState: Pick<UserStore, "accessToken" | "userId"> = {
+  accessToken: null,
+  userId: null,
+};
 
 export const useUserStore = create<UserStore>()(
   persist(
     (set, _get) => ({
-      accessToken: null,
-      logout: async () => {
-        set(() => ({ userId: null, accessToken: null }));
+      ...initialState,
+      setAccessToken: (token: string) => {
+        set(() => ({ accessToken: token }));
+      },
+      setUserId: (userId: string) => {
+        set(() => ({ userId }));
       },
       clear: () => {
-        set(() => ({ userId: null, accessToken: null, googleToken: null }));
+        set(() => initialState);
       },
     }),
     {

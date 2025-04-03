@@ -2,6 +2,7 @@ import React from "react";
 import { Switch } from "react-native-gesture-handler";
 import { ColorsThemePalette } from "@/data/Colors";
 import SettingButton from "./SettingButton";
+import { useThemeColors } from "@/hooks/useThemeColors";
 
 interface SettingButtonSwichProps {
   value: boolean;
@@ -16,11 +17,23 @@ export default function SettingOptionSwich({
   label,
   icon,
 }: SettingButtonSwichProps) {
+  const { colors } = useThemeColors();
+
   return (
     <SettingButton
       label={label}
       icon={icon}
-      rightElement={<Switch value={value} onValueChange={trigger} />}
+      rightElement={
+        <Switch
+          trackColor={{
+            false: colors.navIconActive,
+            true: colors.navbarSurface,
+          }}
+          thumbColor={colors.textPrimary}
+          value={value}
+          onValueChange={trigger}
+        />
+      }
     />
   );
 }

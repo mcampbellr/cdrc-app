@@ -1,4 +1,3 @@
-import { User } from "@/data/users.interface";
 import { saveRefreshToken } from "@/state/refreshToken.store";
 import { useUserStore } from "@/state/users.store";
 import { useNavigate } from "./useNavigate";
@@ -8,11 +7,12 @@ export default function useLogin() {
   const navigate = useNavigate();
 
   const login = async (
-    user: User,
+    userId: string,
     accessToken: string,
     refershToken: string,
   ) => {
-    userStore.setUser(user, accessToken);
+    userStore.setAccessToken(accessToken);
+    userStore.setUserId(userId);
     await saveRefreshToken(refershToken);
 
     navigate("/(private)/(tabs)");

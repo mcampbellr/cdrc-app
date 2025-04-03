@@ -1,14 +1,14 @@
 import Avatar from "@/components/AppAvatar";
 import AppPageWrapper from "@/components/AppPageWrapper";
+import { useUserProfileService } from "@/hooks/services/useUserProfileService";
 import { useHeaderRight } from "@/hooks/useHeader";
-import { useUserStore } from "@/state/users.store";
 import { router } from "expo-router";
 import { useMemo } from "react";
 import { TouchableOpacity } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { RefreshControl, ScrollView } from "react-native-gesture-handler";
 
 export default function Page() {
-  const userStore = useUserStore();
+  const { data: user, refetch, isLoading } = useUserProfileService();
 
   useHeaderRight(
     useMemo(
@@ -23,31 +23,27 @@ export default function Page() {
             alignItems: "center",
           }}
         >
-          <Avatar name={userStore.user?.name || "Unknown"} size={35} />
+          {user && (
+            <Avatar imageUrl={user?.avatar} name={user?.name} size={35} />
+          )}
         </TouchableOpacity>
       ),
-      [],
+      [user],
     ),
   );
 
   return (
-    <ScrollView>
-      <AppPageWrapper>
-        {/* <ViewWithImage> */}
-        {/*   <View */}
-        {/*     style={{ */}
-        {/*       padding: 20, */}
-        {/*     }} */}
-        {/*   > */}
-        {/*     <ThemedText> */}
-        {/*       This is a private page, only accessible if the user is logged in. */}
-        {/*     </ThemedText> */}
-        {/*     <ThemedButton onPress={toggleTheme}> */}
-        {/*       <ThemedButtonText>Change Theme</ThemedButtonText> */}
-        {/*     </ThemedButton> */}
-        {/*   </View> */}
-        {/* </ViewWithImage> */}
-      </AppPageWrapper>
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={isLoading}
+          onRefresh={async () => {
+            await refetch();
+          }}
+        ></RefreshControl>
+      }
+    >
+      <AppPageWrapper></AppPageWrapper>
     </ScrollView>
   );
 }

@@ -34,7 +34,7 @@ export default function About() {
             })
           }
         >
-          <ThemedText type="link">
+          <ThemedText type="link" style={{ fontSize: 12, fontWeight: "bold" }}>
             Obsidians labs - Campbell United Companies LLC
           </ThemedText>
         </Pressable>

@@ -68,7 +68,7 @@ api.interceptors.response.use(
 
       try {
         const refreshToken = await getRefreshToken();
-        const userId = useUserStore.getState().user?.id;
+        const userId = useUserStore.getState().userId;
 
         if (!refreshToken || !userId) {
           throw new Error("No refresh token or user ID found");
@@ -96,7 +96,7 @@ api.interceptors.response.use(
         await deleteRefreshToken();
         useUserStore.setState({
           accessToken: null,
-          user: null,
+          userId: null,
         });
         window.location.href = "/login";
 

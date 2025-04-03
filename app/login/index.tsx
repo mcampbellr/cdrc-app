@@ -1,10 +1,6 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect } from "react";
 import { View, StyleSheet, ScrollView, Platform, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  GestureHandlerRootView,
-  Pressable,
-} from "react-native-gesture-handler";
 import * as WebBrowser from "expo-web-browser";
 
 // Hooks
@@ -19,25 +15,26 @@ import { AppleLoginButton } from "@/components/AppleLoginButton";
 import { GoogleLoginButton } from "@/components/GoogleLoginButton";
 
 // State & API
-import { useUserStore } from "@/state/users.store";
-import { apiCallSignInWithSocial } from "@/api/security.api";
 import { AuthProvider } from "@/data/auth.interface";
 import useLogin from "@/hooks/useLogin";
 import { useRouter } from "expo-router";
 import { useAppStore } from "@/state/app.store";
 import ThemedButton from "@/components/ThemedButton";
+import { useUserProfileService } from "@/hooks/services/useUserProfileService";
+import { useSocialLogin } from "@/hooks/services/useSocialLoginService";
+import FullScreenLoader from "@/components/FullScreenLoader";
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function Login() {
-  const userStore = useUserStore();
+  const { data: user } = useUserProfileService();
+
   const appStore = useAppStore();
   const { colors } = useThemeColors();
   const router = useRouter();
 
-  const [loading, setLoading] = useState(false);
   const login = useLogin();
-
+  const socialLogin = useSocialLogin();
   const signInWithApple = useAppleAuth();
 
   const {
@@ -53,20 +50,19 @@ export default function Login() {
   }, [googleAccessToken, googleCanceled]);
 
   useEffect(() => {
-    if (!userStore.user) return;
-    router.replace("/(private)/(tabs)");
-  }, [userStore.user]);
+    if (user) {
+      router.replace("/(private)/(tabs)");
+    }
+  }, [user]);
 
   const showLoginErrorAlert = () => {
     Alert.alert("Error", "No se pudo obtener la información del usuario.", [
       { text: "OK" },
     ]);
-    setLoading(false);
   };
 
   const handleGoogleResponse = async () => {
     if (googleAccessToken) {
-      setLoading(true);
       await getUserInformation(googleAccessToken, AuthProvider.GOOGLE);
       setGoogleAccessToken(null);
     }
@@ -83,33 +79,39 @@ export default function Login() {
 
   const getUserInformation = async (
     token: string,
-    type: AuthProvider,
+    provider: AuthProvider,
     userName?: string,
   ) => {
-    try {
-      const result = await apiCallSignInWithSocial(token, type, userName);
+    socialLogin.mutate(
+      { token, provider, userName },
+      {
+        onSuccess: async (result) => {
+          if (result.requiresTwoFactor && result.preAuthToken) {
+            router.push({
+              pathname: "/login/mfa",
+              params: {
+                token: result.preAuthToken,
+              },
+            });
 
-      if (result.requiresTwoFactor && result.preAuthToken) {
-        router.push({
-          pathname: "/login/mfa",
-          params: {
-            token: result.preAuthToken,
-          },
-        });
+            return;
+          } else if (result.user && result.accessToken && result.refreshToken) {
+            await login(
+              result.user.id,
+              result.accessToken,
+              result.refreshToken,
+            );
+            return;
+          }
 
-        return;
-      } else if (result.user && result.accessToken && result.refreshToken) {
-        await login(result.user, result.accessToken, result.refreshToken);
-        return;
-      }
-
-      showLoginErrorAlert();
-    } catch (err) {
-      console.error("[Login] Error en getUserInformation:", err);
-      showLoginErrorAlert();
-    } finally {
-      setLoading(false);
-    }
+          showLoginErrorAlert();
+        },
+        onError: (err) => {
+          console.error("[Login] Error en getUserInformation:", err);
+          showLoginErrorAlert();
+        },
+      },
+    );
   };
 
   const handleLoginWithGoogle = async () => {
@@ -117,7 +119,6 @@ export default function Login() {
   };
 
   const handleLoginWithApple = async () => {
-    setLoading(true);
     const result = await signInWithApple();
 
     if (result.error || !result.credentials?.identityToken) {
@@ -144,6 +145,10 @@ export default function Login() {
     );
   };
 
+  if (socialLogin.isPending) {
+    return <FullScreenLoader />;
+  }
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -159,13 +164,11 @@ export default function Login() {
             )}
             <View style={styles.socialButtons}>
               <GoogleLoginButton
-                loading={loading}
                 label="Google"
                 onPress={handleLoginWithGoogle}
               />
               {Platform.OS === "ios" && (
                 <AppleLoginButton
-                  loading={loading}
                   label="Apple"
                   onPress={handleLoginWithApple}
                 />
@@ -174,6 +177,7 @@ export default function Login() {
             <ThemedButton
               onPress={() => {
                 appStore.setOnboardingCompleted(false);
+                router.replace("/onboarding");
               }}
             >
               <ThemedText>reset onboarding</ThemedText>

@@ -1,38 +1,38 @@
-import { ThemedText } from "@/components/ThemedText";
-import { ColorsThemePalette } from "@/data/Colors";
+import { ColorsThemePalette, primitiveColors } from "@/data/Colors";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { useAppStore } from "@/state/app.store";
-import { useUserStore } from "@/state/users.store";
 import { useRouter } from "expo-router";
 import { useEffect, useMemo } from "react";
-import { ActivityIndicator, View, StyleSheet, Platform } from "react-native";
+import { View, StyleSheet, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as NavigationBar from "expo-navigation-bar";
-import { apiCallGetProfile } from "@/api/security.api";
+import { useUserProfileService } from "@/hooks/services/useUserProfileService";
+import BrandLogo from "@/components/BrandLogo";
 
 export default function App() {
-  const { colors } = useThemeColors();
+  const { colors, colorScheme } = useThemeColors();
   const styles = useMemo(() => themeStyles(colors), [colors]);
   const router = useRouter();
   const appStore = useAppStore();
-  const userStore = useUserStore();
+  const { data: user, isLoading } = useUserProfileService({
+    enabled: appStore.onboardingCompleted,
+  });
 
   useEffect(() => {
     if (Platform.OS === "android") {
-      NavigationBar.setBackgroundColorAsync(colors.surfacePrimary);
-      NavigationBar.setButtonStyleAsync("light"); // or "dark"
+      NavigationBar.setBackgroundColorAsync(primitiveColors.brand[500]);
+      NavigationBar.setButtonStyleAsync("light");
     }
-  }, []);
+  }, [colorScheme, colors.surfacePrimary]);
 
   useEffect(() => {
+    if (isLoading) return;
     const timeout = setTimeout(async () => {
       if (appStore.onboardingCompleted) {
-        if (userStore.user) {
+        if (user) {
           try {
-            await apiCallGetProfile();
             router.replace("/(private)/(tabs)");
           } catch (error) {
-            userStore.clear();
             router.replace("/login");
           }
         } else {
@@ -44,16 +44,12 @@ export default function App() {
     }, 10);
 
     return () => clearTimeout(timeout);
-  }, [appStore.onboardingCompleted, userStore.user]);
+  }, [appStore.onboardingCompleted, user, isLoading]);
 
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <ActivityIndicator
-          size={Platform.OS === "android" ? "large" : "small"}
-          color={colors.surfaceInverted}
-        />
-        <ThemedText style={{ paddingTop: 10 }}>Cargando...</ThemedText>
+        <BrandLogo size={100} color={colors.textPrimary} />
       </View>
     </SafeAreaView>
   );

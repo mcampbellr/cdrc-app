@@ -5,7 +5,7 @@ import GoogleSvg from "./GoogleSvg";
 import { useThemeColors } from "@/hooks/useThemeColors";
 
 interface GoogleLoginButtonProps {
-  loading: boolean;
+  loading?: boolean;
   onPress: () => void;
   label?: string;
   loadingText?: string;

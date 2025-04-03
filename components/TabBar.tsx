@@ -1,4 +1,5 @@
 import { ColorsThemePalette } from "@/data/Colors";
+import * as Haptics from "expo-haptics";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import React, { useMemo } from "react";
@@ -24,6 +25,7 @@ function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
           });
 
           if (!isFocused && !event.defaultPrevented) {
+            Haptics.selectionAsync();
             navigation.navigate(route.name, route.params);
           }
         };
@@ -47,7 +49,9 @@ function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
           >
             {TabBarIcon && (
               <TabBarIcon
-                color={isFocused ? colors.navIconActive : colors.navbarIconInactive}
+                color={
+                  isFocused ? colors.navIconActive : colors.navbarIconInactive
+                }
                 size={24}
                 focused={isFocused}
               />

@@ -1,7 +1,7 @@
-import { apiCallValidateMFAToken } from "@/api/security.api";
 import AppHeader from "@/components/AppHeader";
 import ThemedButton from "@/components/ThemedButton";
 import { ThemedText } from "@/components/ThemedText";
+import { useValidateMfaService } from "@/hooks/services/useValidateMfaService";
 import { useClipboardOtpAutofill } from "@/hooks/useClipboardOtpAutofill";
 import useLogin from "@/hooks/useLogin";
 import { useThemeColors } from "@/hooks/useThemeColors";
@@ -12,16 +12,18 @@ import {
   TouchableWithoutFeedback,
   View,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { OtpInput, OtpInputRef } from "react-native-otp-entry";
 
 export default function Page() {
-  const [loading, setLoading] = useState(false);
   const otpInputRef = useRef<OtpInputRef>(null);
   const [otp, setOtp] = useState("");
   const router = useRouter();
   const { colors } = useThemeColors();
+
   const login = useLogin();
+  const validateMfa = useValidateMfaService();
 
   const { token } = useLocalSearchParams<{ token: string }>();
 
@@ -43,15 +45,23 @@ export default function Page() {
       router.replace("/login");
       return;
     }
-    setLoading(true);
-    try {
-      const { data } = await apiCallValidateMFAToken(otp, token);
-      await login(data.user, data.accessToken, data.refreshToken);
-    } catch {
-      otpInputRef.current?.clear();
-    } finally {
-      setLoading(false);
-    }
+
+    validateMfa.mutate(
+      { otp: otp, preAuthToken: token },
+      {
+        onSuccess: async (data) => {
+          await login(data.user.id, data.accessToken, data.refreshToken);
+        },
+        onError: (_error) => {
+          Alert.alert(
+            "Error",
+            "El código de verificación es incorrecto o ha expirado.",
+            [{ text: "Ok" }],
+          );
+          otpInputRef.current?.clear();
+        },
+      },
+    );
   };
 
   return (
@@ -96,7 +106,7 @@ export default function Page() {
             />
           </View>
           <ThemedButton
-            loading={loading}
+            loading={validateMfa.isPending}
             loadingText="Verificando..."
             label="Verificar"
             style={{ marginTop: 20 }}

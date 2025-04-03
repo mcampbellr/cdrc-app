@@ -1,4 +1,3 @@
-// src/hooks/useLogout.ts
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUserStore } from "@/state/users.store";
 import {
@@ -8,9 +7,10 @@ import {
 import { QUERY_KEYS } from "@/data/queryKeys";
 import { User } from "@/data/users.interface";
 import { useNavigate } from "@/hooks/useNavigate";
-import api from "../client.api";
+import api from "@/api/client.api";
+import { API_ROUTES } from "@/data/services.types";
 
-export const useLogout = () => {
+export const useLogoutService = () => {
   const queryClient = useQueryClient();
   const userStore = useUserStore();
   const navigate = useNavigate();
@@ -18,6 +18,8 @@ export const useLogout = () => {
   return useMutation({
     mutationFn: async () => {
       const refreshToken = await getRefreshToken();
+      console.log("Refresh token:", refreshToken);
+
       const userProfile = queryClient.getQueryData<User>(
         QUERY_KEYS.userProfile,
       );
@@ -27,7 +29,7 @@ export const useLogout = () => {
         throw new Error("No refresh token or user ID");
 
       await api.post(
-        "/v1/auth/logout",
+        API_ROUTES.auth.logout,
         { refreshToken, userId },
         {
           headers: {
@@ -42,7 +44,11 @@ export const useLogout = () => {
       await deleteRefreshToken();
       navigate("/login");
     },
-    onError: (err) => {
+    onError: async (err) => {
+      queryClient.clear();
+      userStore.clear();
+      await deleteRefreshToken();
+      navigate("/login");
       console.log("Error during logout:", err);
     },
   });

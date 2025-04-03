@@ -1,8 +1,8 @@
-import { useLogout } from "@/api/services/auth.service";
 import { Alert } from "react-native";
+import { useLogoutService } from "./services/useLogoutService";
 
 export const useLogoutConfirmation = () => {
-  const { mutate: logout, isPending } = useLogout();
+  const { mutate: logout, isPending } = useLogoutService();
 
   return () => {
     if (isPending) return;

@@ -1,17 +1,18 @@
-import { useUserStore } from "@/state/users.store";
+import { useUserProfileService } from "@/hooks/services/useUserProfileService";
 import { Stack, useRouter } from "expo-router";
 import React, { useEffect } from "react";
 import { Platform } from "react-native";
 
 export default function Layout() {
-  const userStorage = useUserStore();
   const router = useRouter();
+  const { data: user, isLoading } = useUserProfileService();
 
   useEffect(() => {
-    if (!userStorage.user) {
+    if (isLoading) return;
+    if (!user) {
       router.replace("/login");
     }
-  }, [userStorage.user]);
+  }, [isLoading, user]);
 
   return (
     <Stack

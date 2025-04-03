@@ -21,21 +21,21 @@ const { height, width } = Dimensions.get("window");
 const data = [
   {
     number: 1,
-    title: "Centro de Rejuvenecimiento",
+    title: "Centro de\nRejuvenecimiento",
     description:
       "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
     image: require("../assets/images/onboarding-img-2.png"),
   },
   {
     number: 2,
-    title: "Antiaging Center",
+    title: "Antiaging\nCenter",
     description:
       "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
     image: require("../assets/images/onboarding-img-1.png"),
   },
   {
     number: 3,
-    title: "Medicina Estética",
+    title: "Medicina\nEstética",
     description:
       "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
     image: require("../assets/images/onboarding-img-3.png"),

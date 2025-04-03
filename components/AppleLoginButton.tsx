@@ -5,7 +5,7 @@ import { useThemeColors } from "@/hooks/useThemeColors";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 interface GoogleLoginButtonProps {
-  loading: boolean;
+  loading?: boolean;
   onPress: () => void;
   label?: string;
   loadingText?: string;

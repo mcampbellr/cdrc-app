@@ -1,6 +1,6 @@
 import { DarkTheme, DefaultTheme, type Theme } from "@react-navigation/native";
 
-const colors = {
+export const primitiveColors = {
   brand: {
     50: "#747372",
     100: "#5D5C5B",
@@ -53,7 +53,7 @@ const colors = {
   darkerGreen: "#2C430B",
 };
 
-const brandPrimary = colors.brand[600];
+const brandPrimary = primitiveColors.brand[600];
 
 export interface ColorsThemePalette {
   surfacePrimary: string;
@@ -83,38 +83,38 @@ export const Colors: ColorsTheme = {
   primary: brandPrimary,
 
   light: {
-    surfacePrimary: colors.gray[200],
+    surfacePrimary: primitiveColors.gray[200],
     surfaceInverted: brandPrimary,
-    buttonBackgroundPrimary: colors.accent[300],
-    buttonLabelPrimary: colors.gray[50],
-    textPrimary: colors.brand[700],
-    textInverted: colors.gray[200],
-    inputBackground: colors.gray[100],
-    inputPlaceholder: colors.gray[300],
-    cardBackground: colors.gray[100],
+    buttonBackgroundPrimary: primitiveColors.accent[300],
+    buttonLabelPrimary: primitiveColors.gray[50],
+    textPrimary: primitiveColors.brand[700],
+    textInverted: primitiveColors.gray[200],
+    inputBackground: primitiveColors.gray[100],
+    inputPlaceholder: primitiveColors.gray[300],
+    cardBackground: primitiveColors.gray[100],
 
     // Pending in figma
-    navbarSurface: colors.brand[700],
-    navIconActive: colors.accent[50],
-    navbarIconInactive: colors.brand[50],
-    border: colors.gray[300],
+    navbarSurface: primitiveColors.brand[700],
+    navIconActive: primitiveColors.accent[50],
+    navbarIconInactive: primitiveColors.brand[50],
+    border: primitiveColors.gray[300],
   },
 
   dark: {
-    surfacePrimary: colors.brand[500],
-    surfaceInverted: colors.gray[200],
-    buttonBackgroundPrimary: colors.accent[400],
-    buttonLabelPrimary: colors.gray[50],
-    textPrimary: colors.gray[50],
-    textInverted: colors.brand[700],
-    inputBackground: colors.gray[700],
-    inputPlaceholder: colors.gray[500],
-    cardBackground: colors.brand[300],
+    surfacePrimary: primitiveColors.brand[500],
+    surfaceInverted: primitiveColors.gray[200],
+    buttonBackgroundPrimary: primitiveColors.accent[400],
+    buttonLabelPrimary: primitiveColors.gray[50],
+    textPrimary: primitiveColors.gray[50],
+    textInverted: primitiveColors.brand[700],
+    inputBackground: primitiveColors.gray[700],
+    inputPlaceholder: primitiveColors.gray[500],
+    cardBackground: primitiveColors.brand[300],
 
-    navbarSurface: colors.brand[50],
-    navbarIconInactive: colors.brand[500],
-    navIconActive: colors.accent[400],
-    border: colors.gray[600],
+    navbarSurface: primitiveColors.brand[50],
+    navbarIconInactive: primitiveColors.brand[500],
+    navIconActive: primitiveColors.accent[400],
+    border: primitiveColors.gray[600],
   },
 };
 
