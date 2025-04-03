@@ -21,7 +21,11 @@ export default function Settings() {
         <View style={{ gap: 8 }}>
           <SettingButton
             icon={(colors, size) => (
-              <Octicons name="person-add" color={colors.text} size={size} />
+              <Octicons
+                name="person-add"
+                color={colors.textPrimary}
+                size={size}
+              />
             )}
             label="Mis Referidos"
             href="/(private)/settings/about"
@@ -29,7 +33,7 @@ export default function Settings() {
 
           <SettingButton
             icon={(colors, size) => (
-              <Octicons name="gear" color={colors.text} size={size} />
+              <Octicons name="gear" color={colors.textPrimary} size={size} />
             )}
             label="Configuraciones"
             href="/(private)/settings/configs"
@@ -45,7 +49,7 @@ export default function Settings() {
 
           <SettingButton
             icon={(colors, size) => (
-              <Octicons name="info" color={colors.text} size={size} />
+              <Octicons name="info" color={colors.textPrimary} size={size} />
             )}
             label="Configuraciones"
             href="/(private)/settings/about"

@@ -12,7 +12,6 @@ import {
   TouchableWithoutFeedback,
   View,
   StyleSheet,
-  Pressable,
 } from "react-native";
 import { OtpInput, OtpInputRef } from "react-native-otp-entry";
 
@@ -47,7 +46,6 @@ export default function Page() {
     setLoading(true);
     try {
       const { data } = await apiCallValidateMFAToken(otp, token);
-      console.log("data", data);
       await login(data.user, data.accessToken, data.refreshToken);
     } catch {
       otpInputRef.current?.clear();
@@ -88,7 +86,7 @@ export default function Page() {
                   borderRadius: 8,
                 },
                 pinCodeTextStyle: {
-                  color: colors.surfacePrimary,
+                  color: colors.textPrimary,
                   fontWeight: "bold",
                 },
                 focusStickStyle: {
@@ -104,9 +102,6 @@ export default function Page() {
             style={{ marginTop: 20 }}
             onPress={handleVerifyToken}
           />
-          {/* <Pressable onPress={handleCancelPress}> */}
-          {/*   <ThemedButton type="link">Cancelar</ThemedButton> */}
-          {/* </Pressable> */}
         </View>
       </TouchableWithoutFeedback>
     </>

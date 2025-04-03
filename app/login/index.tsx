@@ -1,7 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { View, StyleSheet, ScrollView, Platform, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import {
+  GestureHandlerRootView,
+  Pressable,
+} from "react-native-gesture-handler";
 import * as WebBrowser from "expo-web-browser";
 
 // Hooks
@@ -21,11 +24,14 @@ import { apiCallSignInWithSocial } from "@/api/security.api";
 import { AuthProvider } from "@/data/auth.interface";
 import useLogin from "@/hooks/useLogin";
 import { useRouter } from "expo-router";
+import { useAppStore } from "@/state/app.store";
+import ThemedButton from "@/components/ThemedButton";
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function Login() {
   const userStore = useUserStore();
+  const appStore = useAppStore();
   const { colors } = useThemeColors();
   const router = useRouter();
 
@@ -55,6 +61,7 @@ export default function Login() {
     Alert.alert("Error", "No se pudo obtener la información del usuario.", [
       { text: "OK" },
     ]);
+    setLoading(false);
   };
 
   const handleGoogleResponse = async () => {
@@ -142,7 +149,7 @@ export default function Login() {
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
           <View style={{ flexDirection: "row", justifyContent: "center" }}>
-            <BrandLogo color={colors.text} size={175} />
+            <BrandLogo color={colors.textPrimary} size={175} />
           </View>
           <View style={styles.authContainer}>
             {Platform.OS === "ios" && (
@@ -164,6 +171,13 @@ export default function Login() {
                 />
               )}
             </View>
+            <ThemedButton
+              onPress={() => {
+                appStore.setOnboardingCompleted(false);
+              }}
+            >
+              <ThemedText>reset onboarding</ThemedText>
+            </ThemedButton>
           </View>
         </View>
       </ScrollView>

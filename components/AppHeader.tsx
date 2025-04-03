@@ -81,13 +81,13 @@ const AppHeader: React.FC<CenteredHeaderProps> = ({
               onPress={goBackHandler}
               style={[
                 styles.backButton,
-                { backgroundColor: colors.buttonBackground },
+                { backgroundColor: colors.buttonBackgroundPrimary },
               ]}
             >
               <Octicons
                 name="chevron-left"
                 size={20}
-                color={colors.buttonText}
+                color={colors.buttonLabelPrimary}
               />
             </TouchableOpacity>
           )}

@@ -6,7 +6,7 @@ export const useDefaultStyles = () => {
 
   return StyleSheet.create({
     backButton: {
-      backgroundColor: colors.buttonBackground,
+      backgroundColor: colors.buttonBackgroundPrimary,
       padding: 10,
       borderRadius: 5,
       height: 40,

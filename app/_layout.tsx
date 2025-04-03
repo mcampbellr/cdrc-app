@@ -1,4 +1,3 @@
-import { ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -6,14 +5,13 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
 
-import { useColorScheme } from "@/hooks/useColorScheme";
-import { darkTheme, lightTheme } from "@/constants/Colors";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Platform } from "react-native";
 import { AppHeaderProvider } from "@/context/AppHeaderContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import * as Notifications from "expo-notifications";
 import { NotificationProvider } from "@/context/NotificationContext";
+import { AppThemeProvider } from "@/context/AppColorScheme";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -27,7 +25,6 @@ Notifications.setNotificationHandler({
 });
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
@@ -43,7 +40,7 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? darkTheme : lightTheme}>
+    <AppThemeProvider>
       <NotificationProvider>
         <AppHeaderProvider>
           <SafeAreaProvider>
@@ -69,6 +66,6 @@ export default function RootLayout() {
           </SafeAreaProvider>
         </AppHeaderProvider>
       </NotificationProvider>
-    </ThemeProvider>
+    </AppThemeProvider>
   );
 }

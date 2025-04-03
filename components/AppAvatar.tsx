@@ -28,7 +28,7 @@ const Avatar: React.FC<AvatarProps> = ({ name, imageUrl, size = 64 }) => {
           width: size,
           height: size,
           borderRadius: size / 2,
-          backgroundColor: colors.cardBackground,
+          backgroundColor: colors.navbarSurface,
         },
       ]}
     >
@@ -50,7 +50,7 @@ const Avatar: React.FC<AvatarProps> = ({ name, imageUrl, size = 64 }) => {
           ]}
         >
           <Text
-            style={{ color: colors.textNegative, fontWeight: "bold", fontSize }}
+            style={{ color: colors.textInverted, fontWeight: "bold", fontSize }}
           >
             {initials}
           </Text>

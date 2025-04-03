@@ -12,7 +12,7 @@ export default function OAuthRedirectHandler() {
         alignItems: "center",
       }}
     >
-      <ActivityIndicator size="small" color={colors.text} />
+      <ActivityIndicator size="small" color={colors.textPrimary} />
     </View>
   );
 }

@@ -24,14 +24,14 @@ const data = [
     title: "Centro de Rejuvenecimiento",
     description:
       "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
-    image: require("../assets/images/onboarding-img-1.png"),
+    image: require("../assets/images/onboarding-img-2.png"),
   },
   {
     number: 2,
     title: "Antiaging Center",
     description:
       "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
-    image: require("../assets/images/onboarding-img-2.png"),
+    image: require("../assets/images/onboarding-img-1.png"),
   },
   {
     number: 3,
@@ -123,7 +123,7 @@ export default function Onboarding() {
                 styles.indicator,
                 {
                   width: widthAnimated,
-                  backgroundColor: colors.text,
+                  backgroundColor: colors.textPrimary,
                 },
               ]}
             />
@@ -145,7 +145,7 @@ export default function Onboarding() {
             >
               <ThemedButtonText
                 style={{
-                  color: colors.text,
+                  color: colors.textPrimary,
                 }}
               >
                 Saltar

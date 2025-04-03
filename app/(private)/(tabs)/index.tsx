@@ -1,8 +1,9 @@
 import Avatar from "@/components/AppAvatar";
 import AppPageWragger from "@/components/AppPageWrapper";
 import ViewWithImage from "@/components/ImageBackground";
+import ThemedButton, { ThemedButtonText } from "@/components/ThemedButton";
 import { ThemedText } from "@/components/ThemedText";
-import { useNotification } from "@/context/NotificationContext";
+import { useAppTheme } from "@/context/AppColorScheme";
 import { useHeaderRight } from "@/hooks/useHeader";
 import { useUserStore } from "@/state/users.store";
 import { router } from "expo-router";
@@ -12,7 +13,7 @@ import { ScrollView } from "react-native-gesture-handler";
 
 export default function Page() {
   const userStore = useUserStore();
-  const { expoPushToken, notification, error } = useNotification();
+  const { toggleTheme } = useAppTheme();
 
   useHeaderRight(
     useMemo(
@@ -46,7 +47,9 @@ export default function Page() {
             <ThemedText>
               This is a private page, only accessible if the user is logged in.
             </ThemedText>
-            <View></View>
+            <ThemedButton onPress={toggleTheme}>
+              <ThemedButtonText>Change Theme</ThemedButtonText>
+            </ThemedButton>
           </View>
         </ViewWithImage>
       </AppPageWragger>

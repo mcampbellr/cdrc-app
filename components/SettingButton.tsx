@@ -43,7 +43,7 @@ export default function SettingButton({
           <View style={styles.arrow}>
             <Octicons
               name="chevron-right"
-              color={colors.buttonText}
+              color={colors.buttonLabelPrimary}
               style={{
                 transform: "translateX(1px)",
               }}
@@ -69,7 +69,7 @@ const themeStyles = (colors: ColorsThemePalette) =>
       maxHeight: 55,
     },
     arrow: {
-      backgroundColor: colors.buttonBackground,
+      backgroundColor: colors.buttonBackgroundPrimary,
       borderRadius: 5,
       height: 30,
       width: 30,
@@ -88,6 +88,6 @@ const themeStyles = (colors: ColorsThemePalette) =>
     label: {
       fontWeight: "bold",
       marginLeft: 12,
-      color: colors.text,
+      color: colors.textPrimary,
     },
   });

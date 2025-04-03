@@ -76,12 +76,12 @@ export default function AuthCodeInput() {
           autoCapitalize="none"
           autoCorrect={false}
           placeholder="•"
-          placeholderTextColor={colors.text}
+          placeholderTextColor={colors.textPrimary}
           style={[
             styles.input,
             {
               backgroundColor: colors.cardBackground,
-              color: colors.text,
+              color: colors.textPrimary,
               borderColor: colors.border,
             },
           ]}

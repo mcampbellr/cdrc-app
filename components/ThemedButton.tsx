@@ -32,7 +32,7 @@ export const ThemedButtonText: FC<ThemedButtonTextProps> = ({
         {
           fontSize: 16,
           fontWeight: "bold",
-          color: colors.buttonText,
+          color: colors.buttonLabelPrimary,
         },
         style,
       ]}
@@ -62,7 +62,7 @@ const ThemedButton: FC<ThemeButtonProps> = ({
       style={[
         {
           backgroundColor:
-            type === "link" ? "transparent" : colors.buttonBackground,
+            type === "link" ? "transparent" : colors.buttonBackgroundPrimary,
           flex: 1,
           paddingHorizontal: 30,
           paddingVertical: 10,
@@ -83,10 +83,10 @@ const ThemedButton: FC<ThemeButtonProps> = ({
             gap: 10,
           }}
         >
-          <ActivityIndicator size="small" color={colors.buttonText} />
+          <ActivityIndicator size="small" color={colors.buttonLabelPrimary} />
           <Text
             style={{
-              color: colors.buttonText,
+              color: colors.buttonLabelPrimary,
               fontSize: 16,
               fontWeight: "bold",
             }}
@@ -97,7 +97,7 @@ const ThemedButton: FC<ThemeButtonProps> = ({
       ) : label ? (
         <Text
           style={{
-            color: colors.buttonText,
+            color: colors.buttonLabelPrimary,
             fontSize: 16,
             lineHeight: 19,
             fontWeight: "bold",

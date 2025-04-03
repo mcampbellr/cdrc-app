@@ -14,7 +14,7 @@ export default function TabLayout() {
       <Tabs
         tabBar={(props) => <CustomTabBar {...props} />}
         screenOptions={{
-          tabBarActiveTintColor: colors.buttonBackground,
+          tabBarActiveTintColor: colors.buttonBackgroundPrimary,
           animation: "fade",
           tabBarInactiveBackgroundColor: colors.surfacePrimary,
           tabBarActiveBackgroundColor: colors.surfacePrimary,

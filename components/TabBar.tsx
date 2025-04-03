@@ -47,7 +47,7 @@ function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
           >
             {TabBarIcon && (
               <TabBarIcon
-                color={isFocused ? colors.navTextActive : colors.navText}
+                color={isFocused ? colors.navIconActive : colors.navbarIconInactive}
                 size={24}
                 focused={isFocused}
               />
@@ -77,7 +77,7 @@ const themedStyles = (theme: ColorsThemePalette) => {
       justifyContent: "space-around",
       borderRadius: 999,
       bottom: 35,
-      backgroundColor: theme.navBackground,
+      backgroundColor: theme.navbarSurface,
       flexDirection: "row",
     },
   });
