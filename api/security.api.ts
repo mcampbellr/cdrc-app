@@ -1,18 +1,10 @@
 import { User } from "@/constants/users.interface";
 import api from "./client.api";
-
-interface SignInWithGoogleResponse {
-  user?: User;
-  accessToken?: string;
-  preAuthToken?: string;
-  requiresTwoFactor?: boolean;
-}
-
-interface MFAValidationResponse {
-  accessToken: string;
-  deviceId: string;
-  refreshToken: string;
-}
+import {
+  AuthProvider,
+  MFAValidationResponse,
+  SignInResponse,
+} from "@/data/auth.interface";
 
 export const apiCallValidateMFAToken = async (token: string, pat: string) => {
   return api.post<MFAValidationResponse>(
@@ -26,10 +18,18 @@ export const apiCallValidateMFAToken = async (token: string, pat: string) => {
   );
 };
 
-export const apiCallSignInWithGoogle = async (idToken: string) => {
-  const result = await api.post<SignInWithGoogleResponse>("v1/auth/google", {
-    idToken,
-  });
+export const apiCallSignInWithSocial = async (
+  token: string,
+  provider: AuthProvider,
+  userName?: string,
+) => {
+  const payload = {
+    token,
+    provider,
+    ...(provider === AuthProvider.APPLE && userName ? { userName } : {}),
+  };
+
+  const result = await api.post<SignInResponse>("v1/auth/social", payload);
 
   return result.data;
 };

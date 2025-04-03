@@ -6,7 +6,7 @@ const colors = {
     200: "#878C96",
     300: "#4C5362",
     350: "#404857",
-    400: "#101A2D",
+    400: "#151412",
     500: "#0C1322",
     700: "#04060B",
   },
@@ -25,6 +25,8 @@ const colors = {
     700: "#4D4D4D",
   },
 };
+
+const brandPrimary = colors.brand[400];
 
 export interface ColorsThemePalette {
   text: string;

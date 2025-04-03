@@ -11,7 +11,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.mcampbellr.cdrcapp",
-      "usesAppleSignIn": false,
+      "usesAppleSignIn": true,
       "appleTeamId": "D8X2KM25L7"
     },
     "android": {
@@ -38,7 +38,8 @@
           "backgroundColor": "#0E1223"
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-apple-authentication"
     ],
     "experiments": {
       "typedRoutes": true

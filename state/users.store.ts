@@ -1,4 +1,3 @@
-import api from "@/api/client.api";
 import { User } from "@/constants/users.interface";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
@@ -9,8 +8,8 @@ interface UserStore {
   accessToken: string | null;
   googleToken: string | null;
 
-  setUser: (accessToken: string) => Promise<void>;
-  updateProfile: () => Promise<void>;
+  setUser: (user: User, accessToken: string) => Promise<void>;
+  updateProfile: (user: User) => Promise<void>;
   setGoogleToken: (token: string | null) => void;
   logout: () => Promise<void>;
   clear: () => void;
@@ -26,24 +25,13 @@ export const useUserStore = create<UserStore>()(
       setGoogleToken: (token) => {
         set(() => ({ googleToken: token }));
       },
-      updateProfile: async () => {
-        const { data } = await api.get("/v1/auth/me");
-        set(() => ({ user: data }));
+      updateProfile: async (user: User) => {
+        set(() => ({ user }));
       },
-      setUser: async (accessToken) => {
-        const { data } = await api.get("/v1/auth/me", {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-        set(() => ({ user: data, accessToken }));
+      setUser: async (user: User, accessToken: string) => {
+        set(() => ({ user, accessToken }));
       },
       logout: async () => {
-        await api.post("/v1/auth/logout", {
-          headers: {
-            Authorization: `Bearer ${_get().accessToken}`,
-          },
-        });
         set(() => ({ user: null, accessToken: null }));
       },
       clear: () => {

@@ -1,18 +1,37 @@
-import { deleteRefreshToken } from "@/state/refreshToken.store";
+import api from "@/api/client.api";
+import {
+  deleteRefreshToken,
+  getRefreshToken,
+} from "@/state/refreshToken.store";
 import { useUserStore } from "@/state/users.store";
 import { useRouter } from "expo-router";
-import { useCallback } from "react";
 
 export default function useLogout() {
   const router = useRouter();
   const userStore = useUserStore();
 
-  const logout = useCallback(async () => {
-    userStore.clear();
-    await deleteRefreshToken();
+  const logout = async () => {
+    try {
+      const refreshToken = await getRefreshToken();
+      const user = userStore.user;
+      await api.post(
+        "/v1/auth/logout",
+        { refreshToken, userId: user?.id },
+        {
+          headers: {
+            Authorization: `Bearer ${userStore.accessToken}`,
+          },
+        },
+      );
 
-    router.dismissTo("/login");
-  }, [router, userStore]);
+      userStore.clear();
+      await deleteRefreshToken();
+
+      router.dismissTo("/login");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return logout;
 }

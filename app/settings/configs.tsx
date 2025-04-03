@@ -5,6 +5,11 @@ import { Pressable, View, StyleSheet, Alert } from "react-native";
 
 export default function Page() {
   const logout = useLogout();
+
+  const handleLogout = async () => {
+    await logout();
+  };
+
   const showConfirmAlert = () => {
     Alert.alert(
       "Confirmación",
@@ -17,7 +22,7 @@ export default function Page() {
         {
           text: "Sí, continuar",
           style: "destructive",
-          onPress: () => logout(),
+          onPress: () => handleLogout(),
         },
       ],
       { cancelable: false },

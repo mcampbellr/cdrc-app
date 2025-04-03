@@ -1,8 +1,8 @@
 import React from "react";
 import { View } from "react-native";
 import ThemedButton, { ThemedButtonText } from "./ThemedButton";
-import GoogleSvg from "./GoogleSvg";
 import { useThemeColors } from "@/hooks/useThemeColors";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 interface GoogleLoginButtonProps {
   loading: boolean;
@@ -11,10 +11,10 @@ interface GoogleLoginButtonProps {
   loadingText?: string;
 }
 
-export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
+export const AppleLoginButton: React.FC<GoogleLoginButtonProps> = ({
   loading,
   onPress: handlePressAsync,
-  label = "Continuar con Google",
+  label = "Continuar con Apple",
   loadingText = "Cargando...",
 }) => {
   const { colors } = useThemeColors();
@@ -32,7 +32,7 @@ export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
           marginHorizontal: 10,
         }}
       >
-        <GoogleSvg />
+        <FontAwesome5 name="apple" size={24} color={colors.surfacePrimary} />
       </View>
       <ThemedButtonText
         style={{
