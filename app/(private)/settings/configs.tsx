@@ -1,4 +1,4 @@
-import AppPageWragger from "@/components/AppPageWrapper";
+import AppPageWrapper from "@/components/AppPageWrapper";
 import SettingButton from "@/components/SettingButton";
 import SettingOptionSwich from "@/components/SettingOptionSwitch";
 import { useAppTheme } from "@/context/AppColorScheme";
@@ -12,7 +12,7 @@ export default function Page() {
   const { theme, toggleTheme } = useAppTheme();
 
   return (
-    <AppPageWragger>
+    <AppPageWrapper>
       <SettingOptionSwich
         label="Modo oscuro"
         value={theme === "dark"}
@@ -29,6 +29,6 @@ export default function Page() {
           <Octicons name="sign-out" size={24} color={colors.textPrimary} />
         )}
       />
-    </AppPageWragger>
+    </AppPageWrapper>
   );
 }

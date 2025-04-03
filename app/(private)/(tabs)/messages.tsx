@@ -1,10 +1,10 @@
-import AppPageWragger from "@/components/AppPageWrapper";
+import AppPageWrapper from "@/components/AppPageWrapper";
 import { ThemedText } from "@/components/ThemedText";
 
 export default function Page() {
   return (
-    <AppPageWragger>
+    <AppPageWrapper>
       <ThemedText>Messages</ThemedText>
-    </AppPageWragger>
+    </AppPageWrapper>
   );
 }

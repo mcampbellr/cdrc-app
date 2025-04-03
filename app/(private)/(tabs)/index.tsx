@@ -1,17 +1,14 @@
-import { useUserProfile } from "@/api/services/users.service";
 import Avatar from "@/components/AppAvatar";
-import AppPageWragger from "@/components/AppPageWrapper";
-import { ThemedText } from "@/components/ThemedText";
+import AppPageWrapper from "@/components/AppPageWrapper";
 import { useHeaderRight } from "@/hooks/useHeader";
 import { useUserStore } from "@/state/users.store";
 import { router } from "expo-router";
 import { useMemo } from "react";
-import { ActivityIndicator, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
 export default function Page() {
   const userStore = useUserStore();
-  const { data, isLoading, error } = useUserProfile();
 
   useHeaderRight(
     useMemo(
@@ -33,18 +30,9 @@ export default function Page() {
     ),
   );
 
-  if (isLoading) {
-    return (
-      <AppPageWragger>
-        <ActivityIndicator></ActivityIndicator>
-      </AppPageWragger>
-    );
-  }
-
   return (
     <ScrollView>
-      <AppPageWragger>
-        <ThemedText>Welcome to the private page, {data.name}!</ThemedText>
+      <AppPageWrapper>
         {/* <ViewWithImage> */}
         {/*   <View */}
         {/*     style={{ */}
@@ -59,7 +47,7 @@ export default function Page() {
         {/*     </ThemedButton> */}
         {/*   </View> */}
         {/* </ViewWithImage> */}
-      </AppPageWragger>
+      </AppPageWrapper>
     </ScrollView>
   );
 }

@@ -1,7 +1,7 @@
 import AppImageGradient from "@/components/AppImageGradient";
 import ThemedButton, { ThemedButtonText } from "@/components/ThemedButton";
 import { ThemedText } from "@/components/ThemedText";
-import { ColorsThemePalette } from "@/constants/Colors";
+import { ColorsThemePalette } from "@/data/Colors";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { useAppStore } from "@/state/app.store";
 import { useRouter } from "expo-router";

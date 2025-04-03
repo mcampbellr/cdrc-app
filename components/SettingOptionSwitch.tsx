@@ -1,6 +1,6 @@
 import React from "react";
 import { Switch } from "react-native-gesture-handler";
-import { ColorsThemePalette } from "@/constants/Colors";
+import { ColorsThemePalette } from "@/data/Colors";
 import SettingButton from "./SettingButton";
 
 interface SettingButtonSwichProps {

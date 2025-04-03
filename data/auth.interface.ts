@@ -1,4 +1,4 @@
-import { User } from "@/constants/users.interface";
+import { User } from "@/data/users.interface";
 
 export enum AuthProvider {
   GOOGLE = "google",

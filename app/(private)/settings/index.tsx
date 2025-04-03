@@ -1,5 +1,5 @@
 import Avatar from "@/components/AppAvatar";
-import AppPageWragger from "@/components/AppPageWrapper";
+import AppPageWrapper from "@/components/AppPageWrapper";
 import { useUserStore } from "@/state/users.store";
 import { ScrollView, StyleSheet } from "react-native";
 import { View } from "react-native";
@@ -10,7 +10,7 @@ export default function Settings() {
   const userStore = useUserStore();
   return (
     <ScrollView>
-      <AppPageWragger>
+      <AppPageWrapper>
         <View style={styles.avatarContainer}>
           <Avatar
             name={userStore.user?.name || "Unknown"}
@@ -51,12 +51,12 @@ export default function Settings() {
             icon={(colors, size) => (
               <Octicons name="info" color={colors.textPrimary} size={size} />
             )}
-            label="Configuraciones"
+            label="Acerca del app"
             href="/(private)/settings/about"
             showArrow={false}
           />
         </View>
-      </AppPageWragger>
+      </AppPageWrapper>
     </ScrollView>
   );
 }

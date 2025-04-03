@@ -1,8 +1,9 @@
 import { ThemeProvider } from "@react-navigation/native";
 import React, { createContext, useContext, ReactNode, useEffect } from "react";
 import { ColorSchemeName, useColorScheme } from "react-native";
-import { darkTheme, lightTheme } from "@/constants/Colors";
+import { darkTheme, lightTheme } from "@/data/Colors";
 import { useAppStore } from "@/state/app.store";
+import { StatusBar } from "expo-status-bar";
 
 type ThemeContextType = {
   theme: ColorSchemeName;
@@ -34,6 +35,7 @@ export const AppThemeProvider = ({ children }: { children: ReactNode }) => {
         value={appStore.colorMode === "dark" ? darkTheme : lightTheme}
       >
         {children}
+        <StatusBar style={appStore.colorMode === "dark" ? "light" : "dark"} />
       </ThemeProvider>
     </AppThemeContext.Provider>
   );

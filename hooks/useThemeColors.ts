@@ -1,4 +1,4 @@
-import { Colors, ColorsThemePalette } from "@/constants/Colors";
+import { Colors, ColorsThemePalette } from "@/data/Colors";
 import { useAppTheme } from "@/context/AppColorScheme";
 import { ColorSchemeName } from "react-native";
 

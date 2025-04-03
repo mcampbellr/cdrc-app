@@ -1,4 +1,4 @@
-import { ColorsThemePalette } from "@/constants/Colors";
+import { ColorsThemePalette } from "@/data/Colors";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import React, { useMemo } from "react";

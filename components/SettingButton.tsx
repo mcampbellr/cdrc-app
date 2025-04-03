@@ -1,4 +1,4 @@
-import { ColorsThemePalette } from "@/constants/Colors";
+import { ColorsThemePalette } from "@/data/Colors";
 import { useThemeColors } from "@/hooks/useThemeColors";
 import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { ReactNode } from "react";
