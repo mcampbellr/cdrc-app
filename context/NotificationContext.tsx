@@ -49,15 +49,21 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         // custom login if the app is open while you get it
-        console.log("🔔 Notification Received: ", notification);
+        console.log(
+          "🔔 Notification Received: ",
+          notification.request.content.data,
+        );
         setNotification(notification);
       });
 
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
+        const data = response.notification.request.content.data;
+        if (data["android.intent.extra.REFERRER"]) {
+          return;
+        }
         console.log(
           "🔔 Notification Response: ",
-          JSON.stringify(response, null, 2),
           JSON.stringify(response.notification.request.content.data, null, 2),
         );
         // Handle the notification response here

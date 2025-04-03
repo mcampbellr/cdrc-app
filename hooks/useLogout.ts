@@ -4,16 +4,17 @@ import {
   getRefreshToken,
 } from "@/state/refreshToken.store";
 import { useUserStore } from "@/state/users.store";
-import { useRouter } from "expo-router";
+import { useNavigate } from "./useNavigate";
 
 export default function useLogout() {
-  const router = useRouter();
   const userStore = useUserStore();
+  const navigate = useNavigate();
 
   const logout = async () => {
     try {
       const refreshToken = await getRefreshToken();
       const user = userStore.user;
+
       await api.post(
         "/v1/auth/logout",
         { refreshToken, userId: user?.id },
@@ -23,13 +24,12 @@ export default function useLogout() {
           },
         },
       );
-
+    } catch (error) {
+      console.log("Error during logout", error);
+    } finally {
       userStore.clear();
       await deleteRefreshToken();
-
-      router.dismissTo("/login");
-    } catch (error) {
-      console.error(error);
+      navigate("/login");
     }
   };
 

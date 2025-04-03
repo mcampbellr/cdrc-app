@@ -55,16 +55,14 @@ export default function RootLayout() {
                     Platform.OS === "android" ? "slide_from_bottom" : "default",
                 }}
               >
-                <Stack.Screen name="index" />
-                <Stack.Screen name="onboarding" />
-                <Stack.Screen name="login/index" />
-                <Stack.Screen name="oauthredirect" />
-                <Stack.Screen name="settings" />
+                <Stack.Screen name="login/index" key="login" />
+                <Stack.Screen name="oauthredirect" key="oauthredirect" />
+
                 <Stack.Screen
-                  name="(private)"
-                  options={{ headerShown: false, title: "Home" }}
+                  key="login-mfa"
+                  name="login/mfa"
+                  options={{ presentation: "modal" }}
                 />
-                <Stack.Screen name="+not-found" />
               </Stack>
               <StatusBar style="auto" />
             </GestureHandlerRootView>

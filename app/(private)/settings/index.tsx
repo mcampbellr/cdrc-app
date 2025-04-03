@@ -24,7 +24,7 @@ export default function Settings() {
               <Octicons name="person-add" color={colors.text} size={size} />
             )}
             label="Mis Referidos"
-            href="/settings/about"
+            href="/(private)/settings/about"
           />
 
           <SettingButton
@@ -32,23 +32,23 @@ export default function Settings() {
               <Octicons name="gear" color={colors.text} size={size} />
             )}
             label="Configuraciones"
-            href="/settings/configs"
+            href="/(private)/settings/configs"
           />
 
-          <SettingButton
-            icon={(colors, size) => (
-              <Octicons name="person" color={colors.text} size={size} />
-            )}
-            label="Mi Cuenta"
-            href="/settings/about"
-          />
+          {/* <SettingButton */}
+          {/*   icon={(colors, size) => ( */}
+          {/*     <Octicons name="person" color={colors.text} size={size} /> */}
+          {/*   )} */}
+          {/*   label="Mi Cuenta" */}
+          {/*   href="/(private)/settings/" */}
+          {/* /> */}
 
           <SettingButton
             icon={(colors, size) => (
               <Octicons name="info" color={colors.text} size={size} />
             )}
             label="Configuraciones"
-            href="/settings/about"
+            href="/(private)/settings/about"
             showArrow={false}
           />
         </View>

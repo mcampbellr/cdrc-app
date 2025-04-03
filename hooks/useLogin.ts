@@ -1,11 +1,11 @@
 import { User } from "@/constants/users.interface";
 import { saveRefreshToken } from "@/state/refreshToken.store";
 import { useUserStore } from "@/state/users.store";
-import { useRouter } from "expo-router";
+import { useNavigate } from "./useNavigate";
 
 export default function useLogin() {
-  const router = useRouter();
   const userStore = useUserStore();
+  const navigate = useNavigate();
 
   const login = async (
     user: User,
@@ -15,7 +15,7 @@ export default function useLogin() {
     userStore.setUser(user, accessToken);
     await saveRefreshToken(refershToken);
 
-    router.replace("/(private)");
+    navigate("/(private)/(tabs)");
   };
 
   return login;

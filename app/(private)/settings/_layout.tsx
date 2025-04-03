@@ -14,12 +14,14 @@ export default function SettingsLayout() {
     >
       <Stack.Screen
         name="index"
+        key="my-profile"
         options={{
           title: "Mi Perfil",
         }}
       />
       <Stack.Screen
         name="about"
+        key="about"
         options={{
           presentation: "modal",
           title: "Acerca de CDR App",
@@ -28,6 +30,7 @@ export default function SettingsLayout() {
 
       <Stack.Screen
         name="configs"
+        key="configs"
         options={{
           presentation: "modal",
           title: "Configuraciones",

@@ -30,17 +30,19 @@ export default function Page() {
   };
 
   return (
-    <View style={styles.logoutButton}>
-      <Pressable onPress={showConfirmAlert}>
-        <ThemedText
-          style={{
-            color: "tomato",
-          }}
-        >
-          Cerrar session
-        </ThemedText>
-      </Pressable>
-    </View>
+    <>
+      <View style={styles.logoutButton}>
+        <Pressable onPress={showConfirmAlert}>
+          <ThemedText
+            style={{
+              color: "tomato",
+            }}
+          >
+            Cerrar session
+          </ThemedText>
+        </Pressable>
+      </View>
+    </>
   );
 }
 

@@ -6,11 +6,9 @@ import { createJSONStorage, persist } from "zustand/middleware";
 interface UserStore {
   user: User | null;
   accessToken: string | null;
-  googleToken: string | null;
 
   setUser: (user: User, accessToken: string) => Promise<void>;
   updateProfile: (user: User) => Promise<void>;
-  setGoogleToken: (token: string | null) => void;
   logout: () => Promise<void>;
   clear: () => void;
 }
@@ -20,11 +18,7 @@ export const useUserStore = create<UserStore>()(
     (set, _get) => ({
       user: null,
       accessToken: null,
-      googleToken: null,
 
-      setGoogleToken: (token) => {
-        set(() => ({ googleToken: token }));
-      },
       updateProfile: async (user: User) => {
         set(() => ({ user }));
       },

@@ -1,17 +1,18 @@
-// app/oauthredirect.tsx
-import { useUserStore } from "@/state/users.store";
-import { useRouter } from "expo-router";
-import { useEffect } from "react";
+import { useThemeColors } from "@/hooks/useThemeColors";
+import { ActivityIndicator, View } from "react-native";
 
 export default function OAuthRedirectHandler() {
-  const router = useRouter();
-  const userStore = useUserStore();
+  const { colors } = useThemeColors();
 
-  useEffect(() => {
-    if (!userStore.googleToken) return;
-    // Redirige inmediatamente o simplemente ignora
-    router.replace("/login");
-  }, [userStore.googleToken]);
-
-  return null;
+  return (
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <ActivityIndicator size="small" color={colors.text} />
+    </View>
+  );
 }

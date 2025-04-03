@@ -30,7 +30,7 @@ export default function App() {
         if (userStore.user) {
           try {
             await apiCallGetProfile();
-            router.replace("/(private)");
+            router.replace("/(private)/(tabs)");
           } catch (error) {
             userStore.clear();
             router.replace("/login");

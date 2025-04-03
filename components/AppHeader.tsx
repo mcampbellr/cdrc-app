@@ -1,14 +1,13 @@
-import React, { useMemo } from "react";
+import React from "react";
 import {
   View,
   TouchableOpacity,
   StyleSheet,
   Platform,
   DimensionValue,
-  Alert,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useNavigation, useRouter } from "expo-router";
+import { Href, useNavigation, useRouter } from "expo-router";
 import { Octicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 
@@ -22,12 +21,14 @@ interface CenteredHeaderProps {
   showBackButton?: boolean;
   showLogo?: boolean;
   options?: NativeStackNavigationOptions;
+  backHref?: Href;
 }
 
 const AppHeader: React.FC<CenteredHeaderProps> = ({
   showBackButton = false,
   showLogo = true,
   options,
+  backHref,
 }) => {
   const { colors } = useThemeColors();
   const router = useRouter();
@@ -38,9 +39,10 @@ const AppHeader: React.FC<CenteredHeaderProps> = ({
   const shouldShowLogo = showLogo && dynamicShowLogo;
 
   const canGoBack =
-    showBackButton &&
-    typeof navigation.canGoBack === "function" &&
-    navigation.canGoBack();
+    (showBackButton &&
+      typeof navigation.canGoBack === "function" &&
+      navigation.canGoBack()) ||
+    backHref;
 
   const paddingTop = (): DimensionValue => {
     return Platform.OS === "android" || options?.presentation !== "modal"
@@ -52,6 +54,12 @@ const AppHeader: React.FC<CenteredHeaderProps> = ({
     if (Platform.OS === "android") {
       Haptics.selectionAsync();
     }
+
+    if (backHref) {
+      router.replace(backHref);
+      return;
+    }
+
     router.back();
   };
 
@@ -88,7 +96,9 @@ const AppHeader: React.FC<CenteredHeaderProps> = ({
         {/* Center content: logo or title */}
         <View style={styles.center}>
           {shouldShowLogo && (
-            <TouchableOpacity onPress={() => router.dismissTo?.("/(private)")}>
+            <TouchableOpacity
+              onPress={() => router.dismissTo?.("/(private)/(tabs)")}
+            >
               <BrandLogo fill={colors.surfaceInverted} />
             </TouchableOpacity>
           )}
